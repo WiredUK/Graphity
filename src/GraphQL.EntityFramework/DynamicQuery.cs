@@ -10,6 +10,8 @@ namespace GraphQL.EntityFramework
     {
         public DynamicQuery(TContext ctx)
         {
+            Name = $"{typeof(TContext).Name}Query";
+
             var dbSetProperties = typeof(TContext)
                 .GetProperties()
                 .Where(pi => pi.PropertyType.IsGenericType &&
@@ -22,13 +24,11 @@ namespace GraphQL.EntityFramework
 
                 var genericFieldMethod = typeof(ObjectGraphType<object>)
                     .GetMethods()
-                    .Single(mi => mi.Name == "Field" && 
+                    .Single(mi => mi.Name == "Field" &&
                                   mi.IsGenericMethod &&
                                   mi.GetParameters().Length == 5);
 
                 var fieldMethod = genericFieldMethod.MakeGenericMethod(listGraphType);
-
-                Func<ResolveFieldContext<object>, object> lambda = context => GetDataFromContext(ctx, dbSetType);
 
                 fieldMethod.Invoke(this,
                     new object[]
@@ -36,25 +36,22 @@ namespace GraphQL.EntityFramework
                         dbSetProperty.Name,
                         $"{dbSetProperty.Name} of type {dbSetType.Name}",
                         new QueryArguments(),
-                        lambda,
+                        (Func<ResolveFieldContext<object>, object>) (resolveContext =>
+                            GetDataFromContext(ctx, dbSetType, resolveContext)),
                         null
                     });
 
-
-                //Field(graphType,
-                //    dbSetProperty.Name, 
-                //    $"{dbSetProperty.Name} of type {dbSetType.Name}",
-                //    new QueryArguments(),
-                //    context => GetDataFromContext(ctx, dbSetType));
             }
         }
 
-        private object GetDataFromContext(TContext context, System.Type type)
+        private object GetDataFromContext(TContext context, Type type, ResolveFieldContext<object> resolveContext)
         {
             var genericMethod = typeof(TContext).GetMethod("Set");
             var method = genericMethod.MakeGenericMethod(type);
 
             var queryable = method.Invoke(context, null);
+
+            //TODO: Invoke the includes, where clause etc.
 
             var genericToListMethod = typeof(Enumerable).GetMethod("ToList");
             var toListMethod = genericToListMethod.MakeGenericMethod(type);

@@ -4,8 +4,10 @@ namespace GraphQL.EntityFramework
 {
     public class DynamicObjectGraphType<TEntity> : ObjectGraphType<TEntity>
     {
-        public DynamicObjectGraphType()
+        public DynamicObjectGraphType(string name)
         {
+            Name = name;
+
             var properties = typeof(TEntity)
                 .GetProperties();
 
@@ -19,7 +21,11 @@ namespace GraphQL.EntityFramework
                 {
                     Field<IntGraphType>(property.Name);
                 }
-
+                else
+                {
+                    var graphType = typeof(DynamicObjectGraphType<>).MakeGenericType(property.PropertyType);
+                    Field(graphType, property.Name);
+                }
             }
         }
     }

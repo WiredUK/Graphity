@@ -14,20 +14,6 @@ namespace AspNetWebApi.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Animal>(builder =>
-            {
-                builder.ToTable("Animals");
-
-                builder.HasKey(a => a.Id);
-
-                builder.HasData(new List<Animal>
-                {
-                    new Animal {Id = 1, Name = "Dog"},
-                    new Animal {Id = 2, Name = "Cat"},
-                    new Animal {Id = 3, Name = "Sloth"}
-                });
-            });
-
             modelBuilder.Entity<Country>(builder =>
             {
                 builder.ToTable("Countries");
@@ -41,6 +27,22 @@ namespace AspNetWebApi.Data
                     new Country {Id = 3, Name = "Germany"}
                 });
             });
+
+            modelBuilder.Entity<Animal>(builder =>
+            {
+                builder.ToTable("Animals");
+
+                builder.HasKey(a => a.Id);
+
+                builder.HasData(new List<Animal>
+                {
+                    new Animal {Id = 1, Name = "Dog", NumberOfLegs = 4, LivesInId = 1},
+                    new Animal {Id = 2, Name = "Cat", NumberOfLegs = 4, LivesInId = 2},
+                    new Animal {Id = 3, Name = "Sloth", NumberOfLegs = 2, LivesInId = 3}
+                });
+            });
+
+
         }
     }
 }

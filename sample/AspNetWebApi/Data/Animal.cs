@@ -8,6 +8,7 @@ namespace AspNetWebApi.Data
         public string Name { get; set; }
         public int NumberOfLegs { get; set; }
 
-        public ICollection<Country> LivesIn { get; set; }
+        public int LivesInId { get; set; }
+        public Country LivesIn { get; set; }
     }
 }

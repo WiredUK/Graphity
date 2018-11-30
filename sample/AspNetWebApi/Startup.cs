@@ -32,7 +32,7 @@ namespace AspNetWebApi
 
             services.AddDbContext<AnimalContext>(builder =>
             {
-                builder.UseInMemoryDatabase("TestDb");
+                builder.UseSqlServer(Configuration.GetConnectionString("GraphQL2EFCore"));
             });
 
             services.AddGraphQL<AnimalContext>();

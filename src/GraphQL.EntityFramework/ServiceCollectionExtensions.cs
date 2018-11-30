@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,14 +24,13 @@ namespace GraphQL.EntityFramework
                 .Where(pi => pi.PropertyType.IsGenericType &&
                              typeof(DbSet<>).IsAssignableFrom(pi.PropertyType.GetGenericTypeDefinition()));
 
-            //var assemblyName = typeof(TContext).Assembly.GetName();
-
             foreach (var dbSetProperty in dbSetProperties)
             {
                 var dbSetType = dbSetProperty.PropertyType.GenericTypeArguments[0];
                 var graphType = typeof(DynamicObjectGraphType<>).MakeGenericType(dbSetType);
 
-                services.AddSingleton(graphType);
+                services.AddSingleton(graphType,
+                    Activator.CreateInstance(graphType, $"{dbSetType.Name}Type"));
             }
 
             return services;

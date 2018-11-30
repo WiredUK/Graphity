@@ -19,8 +19,6 @@ namespace AspNetWebApi.Controllers
         {
             _documentExecuter = documentExecuter;
             _schema = schema;
-
-            var animals = context.Animals.ToList();
         }
 
         [Route("graph")]
