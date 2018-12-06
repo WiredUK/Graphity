@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace AspNetWebApi.Data
+﻿namespace AspNetWebApi.Data
 {
     public class Animal
     {

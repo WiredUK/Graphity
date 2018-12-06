@@ -6,7 +6,7 @@ namespace GraphQL.EntityFramework
     public class DynamicSchema<TContext> : Schema
         where TContext : DbContext
     {
-        public DynamicSchema(IDependencyResolver resolver)
+        public DynamicSchema(IScopedDependencyResolver resolver)
             : base(resolver)
         {
             Query = resolver.Resolve<DynamicQuery<TContext>>();

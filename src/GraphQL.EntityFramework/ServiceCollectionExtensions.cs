@@ -11,12 +11,22 @@ namespace GraphQL.EntityFramework
         public static IServiceCollection AddGraphQL<TContext>(this IServiceCollection services)
             where TContext : DbContext
         {
+            return services.AddGraphQL<TContext>(null);
+
+        }
+
+        public static IServiceCollection AddGraphQL<TContext>(this IServiceCollection services, Action<QueryOptions<TContext>> setupAction)
+            where TContext : DbContext
+        {
+            var queryOptions = new QueryOptions<TContext>();
+            setupAction(queryOptions);
+            DynamicQuery<TContext>.QueryOptions = queryOptions;
+
             services.AddTransient<IDocumentExecuter, DocumentExecuter>();
 
-            services.AddScoped<IDependencyResolver>(serviceProvider => new FuncDependencyResolver(serviceProvider.GetRequiredService));
-            services.AddScoped<ISchema, DynamicSchema<TContext>>();
-            services.AddScoped<DynamicQuery<TContext>>();
-
+            services.AddSingleton<IScopedDependencyResolver>(serviceProvider => new ScopedFuncDependencyResolver(serviceProvider.GetRequiredService, serviceProvider.CreateScope));
+            services.AddSingleton<ISchema, DynamicSchema<TContext>>();
+            services.AddSingleton<DynamicQuery<TContext>>();
             services.AddSingleton<ObjectGraphType>();
 
             var dbSetProperties = typeof(TContext)

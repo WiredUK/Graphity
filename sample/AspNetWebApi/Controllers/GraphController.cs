@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AspNetWebApi.Data;
 using AspNetWebApi.Graph;
 using GraphQL;
