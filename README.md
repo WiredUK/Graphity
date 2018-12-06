@@ -76,3 +76,7 @@ Here are some things I'd like to get working:
   * Name the fields.
   * Name individual properties.
   * Exclude properties from the graph.
+
+## Contributing
+
+I am open to contributions but please open an issue and discuss it with me before you submit a pull request.
