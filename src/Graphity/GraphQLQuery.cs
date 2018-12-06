@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AspNetWebApi.Graph
+namespace Graphity
 {
 
     public class GraphQLQuery

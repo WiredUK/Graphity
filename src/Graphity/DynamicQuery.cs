@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
@@ -14,48 +13,17 @@ namespace Graphity
     {
         private readonly IScopedDependencyResolver _resolver;
 
-        internal static QueryOptions<TContext> QueryOptions { private get; set; }
-
-        private IEnumerable<PropertyInfo> GetDbSets()
-        {
-            var dbSets = typeof(TContext)
-                .GetProperties()
-                .Where(pi => pi.PropertyType.IsGenericType &&
-                             typeof(DbSet<>).IsAssignableFrom(pi.PropertyType.GetGenericTypeDefinition()))
-                .ToList();
-
-            if (!QueryOptions.IncludeDbSets.Any())
-            {
-                return dbSets;
-            }
-
-            var includedDbSets = new List<PropertyInfo>();
-
-            foreach (var includeDbSet in QueryOptions.IncludeDbSets)
-            {
-                if (!(includeDbSet.Body is MemberExpression member))
-                {
-                    continue;
-                }
-
-                var propInfo = member.Member as PropertyInfo;
-
-                includedDbSets.Add(propInfo);
-            }
-
-            return includedDbSets;
-        }
+        internal static QueryOptions<TContext> QueryOptions { get; set; }
 
         public DynamicQuery(IScopedDependencyResolver resolver)
         {
             _resolver = resolver;
 
             Name = $"{typeof(TContext).Name}Query";
-            
-            foreach (var dbSetProperty in GetDbSets())
+
+            foreach (var dbSetProperty in QueryOptions.GetFields())
             {
-                var dbSetType = dbSetProperty.PropertyType.GenericTypeArguments[0];
-                var graphType = typeof(DynamicObjectGraphType<>).MakeGenericType(dbSetType);
+                var graphType = typeof(DynamicObjectGraphType<,>).MakeGenericType(typeof(TContext), dbSetProperty);
                 var listGraphType = typeof(ListGraphType<>).MakeGenericType(graphType);
 
                 var genericFieldMethod = typeof(ObjectGraphType<object>)
@@ -70,13 +38,12 @@ namespace Graphity
                     new object[]
                     {
                         dbSetProperty.Name,
-                        $"{dbSetProperty.Name} of type {dbSetType.Name}",
+                        $"{dbSetProperty.Name} of type {dbSetProperty.Name}",
                         new QueryArguments(),
                         (Func<ResolveFieldContext<object>, object>) (resolveContext =>
-                            GetDataFromContext(dbSetType, resolveContext)),
+                            GetDataFromContext(dbSetProperty, resolveContext)),
                         null
                     });
-
             }
         }
 
