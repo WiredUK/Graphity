@@ -7,7 +7,7 @@ using System.Reflection;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 
-namespace GraphQL.EntityFramework
+namespace Graphity
 {
     public class DynamicQuery<TContext> : ObjectGraphType<object>
         where TContext : DbContext

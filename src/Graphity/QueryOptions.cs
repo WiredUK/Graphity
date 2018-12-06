@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
-namespace GraphQL.EntityFramework
+namespace Graphity
 {
     public class QueryOptions<TContext>
         where TContext : DbContext

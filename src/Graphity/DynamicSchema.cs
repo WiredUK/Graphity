@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using GraphQL.Types;
 
-namespace GraphQL.EntityFramework
+namespace Graphity
 {
     public class DynamicSchema<TContext> : Schema
         where TContext : DbContext

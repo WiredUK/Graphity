@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using GraphQL;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace GraphQL.EntityFramework
+namespace Graphity
 {
     public interface IScopedDependencyResolver : IDependencyResolver
     {

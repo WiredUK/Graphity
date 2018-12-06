@@ -1,6 +1,6 @@
 ﻿using GraphQL.Types;
 
-namespace GraphQL.EntityFramework
+namespace Graphity
 {
     public class DynamicObjectGraphType<TEntity> : ObjectGraphType<TEntity>
     {

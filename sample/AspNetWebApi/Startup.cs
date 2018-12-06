@@ -1,5 +1,5 @@
 ﻿using AspNetWebApi.Data;
-using GraphQL.EntityFramework;
+using Graphity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

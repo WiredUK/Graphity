@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
+using GraphQL;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GraphQL.EntityFramework
+namespace Graphity
 {
     public static class ServiceCollectionExtensions
     {

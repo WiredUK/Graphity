@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0318C058-CAB1-411E-9AE8-2929D6C4629F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphQL.EntityFramework", "src\GraphQL.EntityFramework\GraphQL.EntityFramework.csproj", "{2587B653-7407-495A-B3FB-6AFCF3A34F44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graphity", "src\Graphity\Graphity.csproj", "{2587B653-7407-495A-B3FB-6AFCF3A34F44}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{D9A0D114-679E-4C76-AFEC-2CBB5D2D441B}"
 EndProject

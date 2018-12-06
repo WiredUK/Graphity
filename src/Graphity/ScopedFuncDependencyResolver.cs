@@ -1,7 +1,8 @@
 ﻿using System;
+using GraphQL;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GraphQL.EntityFramework
+namespace Graphity
 {
     internal class ScopedFuncDependencyResolver : FuncDependencyResolver, IScopedDependencyResolver
     {
