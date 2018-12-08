@@ -26,8 +26,7 @@ namespace Graphity
         /// </summary>
         /// <typeparam name="TContext"></typeparam>
         /// <param name="services"></param>
-        /// <param name="setupAction">Use this to configure the graph. Call <see cref="options.ConfigureSet"/> to exclude
-        /// and exclude the DbSet properties.</param>
+        /// <param name="setupAction">Use this to configure the graph.</param>
         /// <returns></returns>
         public static IServiceCollection AddGraphity<TContext>(this IServiceCollection services, Action<QueryOptions<TContext>> setupAction)
             where TContext : DbContext
@@ -44,7 +43,7 @@ namespace Graphity
                 ServiceLifetime = contextService.Lifetime
             };
 
-            setupAction(queryOptions);
+            setupAction?.Invoke(queryOptions);
             DynamicQuery<TContext>.QueryOptions = queryOptions;
 
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
@@ -53,18 +52,13 @@ namespace Graphity
             services.AddSingleton<DynamicQuery<TContext>>();
             services.AddSingleton<ObjectGraphType>();
 
-            var dbSetProperties = typeof(TContext)
-                .GetProperties()
-                .Where(pi => pi.PropertyType.IsGenericType &&
-                             typeof(DbSet<>).IsAssignableFrom(pi.PropertyType.GetGenericTypeDefinition()));
 
-            foreach (var dbSetProperty in dbSetProperties)
+            foreach (var type in queryOptions.GetFields())
             {
-                var dbSetType = dbSetProperty.PropertyType.GenericTypeArguments[0];
-                var graphType = typeof(DynamicObjectGraphType<,>).MakeGenericType(typeof(TContext), dbSetType);
+                var graphType = typeof(DynamicObjectGraphType<,>).MakeGenericType(typeof(TContext), type);
 
                 services.AddSingleton(graphType,
-                    Activator.CreateInstance(graphType, $"{dbSetType.Name}Type"));
+                    Activator.CreateInstance(graphType, $"{type.Name}Type"));
             }
 
             return services;

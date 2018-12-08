@@ -1,4 +1,5 @@
-﻿using GraphQL.Types;
+﻿using System.Collections;
+using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 
 namespace Graphity
@@ -22,6 +23,14 @@ namespace Graphity
                 else if (property.PropertyType == typeof(int))
                 {
                     Field<IntGraphType>(property.Name);
+                }
+                else if(typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                {
+                    var type = property.PropertyType.GetGenericArguments()[0];
+
+                    var graphType = typeof(DynamicObjectGraphType<,>).MakeGenericType(typeof(TContext), type);
+                    var listGraphType = typeof(ListGraphType<>).MakeGenericType(graphType);
+                    Field(listGraphType, property.Name);
                 }
                 else if(DynamicQuery<TContext>.QueryOptions.CanBeAChild(property.PropertyType))
                 {

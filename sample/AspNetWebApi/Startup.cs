@@ -28,13 +28,11 @@ namespace AspNetWebApi
                 builder.UseSqlServer(Configuration.GetConnectionString("GraphQL2EFCore"));
             });
 
-            services.AddGraphity<AnimalContext>();
-
             services.AddGraphity<AnimalContext>(options =>
             {
                 options
                     .ConfigureSet(ctx => ctx.Animals)
-                    .ConfigureSet(ctx => ctx.Countries, SetOption.IncludeAsFieldOnly);
+                    .ConfigureSet(ctx => ctx.Countries);
             });
         }
 

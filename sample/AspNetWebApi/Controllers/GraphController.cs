@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using AspNetWebApi.Data;
-using AspNetWebApi.Graph;
 using Graphity;
 using GraphQL;
 using GraphQL.Types;
