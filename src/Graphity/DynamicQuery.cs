@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Graphity.Where;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,12 @@ namespace Graphity
             _resolver = resolver;
 
             Name = $"{typeof(TContext).Name}Query";
+
+            var whereArgument = new QueryArgument<ListGraphType<WhereExpressionType>>
+            {
+                Name = "where",
+                Description = "Filter to apply in format ```{path, comparison, value}```."
+            };
 
             foreach (var dbSetProperty in QueryOptions.GetFields())
             {
@@ -39,7 +46,7 @@ namespace Graphity
                     {
                         dbSetProperty.Name,
                         $"{dbSetProperty.Name} of type {dbSetProperty.Name}",
-                        new QueryArguments(),
+                        new QueryArguments(whereArgument),
                         (Func<ResolveFieldContext<object>, object>) (resolveContext =>
                             GetDataFromContext(dbSetProperty, resolveContext)),
                         null
@@ -81,7 +88,20 @@ namespace Graphity
                 }
             }
 
-            //TODO: Invoke the where clause etc.
+            if (resolveContext.Arguments.ContainsKey("where"))
+            {
+                var whereExpressions = resolveContext.GetArgument<WhereExpression[]>("where");
+
+                foreach (var whereExpression in whereExpressions)
+                {
+                    var expression = ComparisonExpressions.GetComparisonExpression<T>(
+                        whereExpression.Comparison,
+                        whereExpression.Path, 
+                        whereExpression.Value);
+
+                    query = query.Where(expression);
+                }
+            }
 
             return query.ToList();
         }

@@ -71,7 +71,6 @@ Here are some things I'd like to get working:
 
 * *Negate the need to set up a controller*: I'd like to inject Graphity directly into the pipeline and serve requests directly. This would remove the need for steps 2 and 3 from the instructions above.
 * *Add multiple include levels*: Currently Graphity only lets you go a single level deep, I'd like to extend this to add the Entity Framework includes to any level based on what you have asked for in the query.
-* *Add filtering*: Basically we need a where clause. This is currently in progress as I have the code from another project that I just need to drop in.
 * *Advanced configuration*: The ability to further configure the graph, for example:
   * Name the fields.
   * Name individual properties.

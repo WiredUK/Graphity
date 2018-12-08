@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Graphity.Where;
 using GraphQL;
 using GraphQL.Types;
+using GraphQL.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -52,6 +54,11 @@ namespace Graphity
             services.AddSingleton<DynamicQuery<TContext>>();
             services.AddSingleton<ObjectGraphType>();
 
+            //Where
+            services.AddSingleton<WhereExpressionType>();
+            services.AddSingleton<ComparisonType>();
+            GraphTypeTypeRegistry.Register<Comparison, ComparisonType>();
+            GraphTypeTypeRegistry.Register<WhereExpression, WhereExpressionType>();
 
             foreach (var type in queryOptions.GetFields())
             {
