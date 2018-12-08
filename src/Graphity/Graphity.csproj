@@ -9,7 +9,7 @@
     <PackageIconUrl>http://david.glass/w-logo.png</PackageIconUrl>
     <PackageTags>GraphQL Entity Framework Core</PackageTags>
     <PackageReleaseNotes>Added middleware, filtering and enumerable navigation properties</PackageReleaseNotes>
-    <PackageLicense>GPL-3.0-or-later</PackageLicense>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
