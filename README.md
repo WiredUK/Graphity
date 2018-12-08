@@ -38,6 +38,7 @@ Here are some things I'd like to get working:
   * Name the fields.
   * Name individual properties.
   * Exclude properties from the graph.
+* *Add unit testing*: Yeah, this should have been done already...
 
 ## Contributing
 
