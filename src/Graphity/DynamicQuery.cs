@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using Graphity.Where;
 using GraphQL.Types;
@@ -20,7 +21,7 @@ namespace Graphity
         {
             _resolver = resolver;
 
-            Name = $"{typeof(TContext).Name}Query";
+            Name = QueryOptions.Name;
 
             var whereArgument = new QueryArgument<ListGraphType<WhereExpressionType>>
             {
@@ -30,7 +31,7 @@ namespace Graphity
 
             foreach (var dbSetProperty in QueryOptions.GetFields())
             {
-                var graphType = typeof(DynamicObjectGraphType<,>).MakeGenericType(typeof(TContext), dbSetProperty);
+                var graphType = typeof(DynamicObjectGraphType<,>).MakeGenericType(typeof(TContext), dbSetProperty.Type);
                 var listGraphType = typeof(ListGraphType<>).MakeGenericType(graphType);
 
                 var genericFieldMethod = typeof(ObjectGraphType<object>)
@@ -40,21 +41,21 @@ namespace Graphity
                                   mi.GetParameters().Length == 5);
 
                 var fieldMethod = genericFieldMethod.MakeGenericMethod(listGraphType);
-
+                
                 fieldMethod.Invoke(this,
                     new object[]
                     {
-                        dbSetProperty.Name,
-                        $"{dbSetProperty.Name} of type {dbSetProperty.Name}",
+                        dbSetProperty.FieldName,
+                        $"{dbSetProperty.FieldName} of type {dbSetProperty.TypeName}",
                         new QueryArguments(whereArgument),
                         (Func<ResolveFieldContext<object>, object>) (resolveContext =>
-                            GetDataFromContext(dbSetProperty, resolveContext)),
+                            GetDataFromContext(dbSetProperty.Type, resolveContext, dbSetProperty.FilterExpression)),
                         null
                     });
             }
         }
 
-        private object GetDataFromContext(Type type, ResolveFieldContext<object> resolveContext)
+        private object GetDataFromContext(Type type, ResolveFieldContext<object> resolveContext, Expression filterExpression)
         {
             var getDataMethod = typeof(DynamicQuery<TContext>)
                 .GetMethod("GetTypedDataFromContext", BindingFlags.NonPublic | BindingFlags.Static);
@@ -65,12 +66,12 @@ namespace Graphity
             using (var scope = _resolver.CreateScope())
             {
                 var context = scope.ServiceProvider.GetService<TContext>();
-                return getDataMethod.Invoke(null, new object[] { context, resolveContext });
+                return getDataMethod.Invoke(null, new object[] { context, resolveContext, filterExpression });
             }
         }
 
         // ReSharper disable once UnusedMember.Local
-        private static IEnumerable<T> GetTypedDataFromContext<T>(DbContext context, ResolveFieldContext resolveContext)
+        private static IEnumerable<T> GetTypedDataFromContext<T>(DbContext context, ResolveFieldContext resolveContext, Expression<Func<T, bool>> filterExpression)
             where T : class
         {
             IQueryable<T> query = context.Set<T>();
@@ -86,6 +87,11 @@ namespace Graphity
 
                     query = query.Include(actualName);
                 }
+            }
+
+            if (filterExpression != null)
+            {
+                query = query.Where(filterExpression);
             }
 
             if (resolveContext.Arguments.ContainsKey("where"))

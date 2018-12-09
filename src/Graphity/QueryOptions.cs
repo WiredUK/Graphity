@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Graphity
 {
@@ -11,11 +9,18 @@ namespace Graphity
         where TContext : DbContext
     {
         internal List<DbSetConfiguration> DbSetConfigurations { get; set; }
-        internal ServiceLifetime ServiceLifetime { get; set; }
+        internal string Name { get; set; }
 
         internal QueryOptions()
         {
+            Name = $"{typeof(TContext).Name}Query";
             DbSetConfigurations = new List<DbSetConfiguration>();
+        }
+
+        public QueryOptions<TContext> QueryName(string name)
+        {
+            Name = name;
+            return this;
         }
 
         /// <summary>
@@ -29,38 +34,44 @@ namespace Graphity
         public QueryOptions<TContext> ConfigureSet<TProperty>(Expression<Func<TContext, DbSet<TProperty>>> dbSetExpression, SetOption setOption = SetOption.IncludeAsFieldAndChild)
             where TProperty : class
         {
+            var memberExpression = (MemberExpression)dbSetExpression.Body;
+
             DbSetConfigurations.Add(new DbSetConfiguration
             {
                 Type = typeof(TProperty),
-                SetOption = setOption
+                SetOption = setOption,
+                FieldName = memberExpression.Member.Name
             });
 
             return this;
         }
 
-        internal IEnumerable<Type> GetFields()
+        /// <summary>
+        /// Configure an individual DbSet for inclusion or exclusion. By default all DbSets are included. Manually including
+        /// a single DbSet will then only include that item. 
+        /// </summary>
+        /// <typeparam name="TProperty"></typeparam>
+        /// <param name="dbSetExpression"></param>
+        /// <param name="setOption"></param>
+        /// <param name="fieldName"></param>
+        /// <param name="defaultFilter"></param>
+        /// <returns></returns>
+        public QueryOptions<TContext> ConfigureSet<TProperty>(
+            Expression<Func<TContext, DbSet<TProperty>>> dbSetExpression, 
+            string fieldName, 
+            SetOption setOption = SetOption.IncludeAsFieldAndChild, 
+            Expression<Func<TProperty, bool>> defaultFilter = null)
+            where TProperty : class
         {
-            var dbSetProperties = typeof(TContext)
-                .GetProperties()
-                .Where(pi => pi.PropertyType.IsGenericType &&
-                             typeof(DbSet<>).IsAssignableFrom(pi.PropertyType.GetGenericTypeDefinition()));
-
-            if (!DbSetConfigurations.Any())
+            DbSetConfigurations.Add(new DbSetConfiguration
             {
-                return dbSetProperties.Select(pi => pi.PropertyType);
-            }
+                Type = typeof(TProperty),
+                SetOption = setOption,
+                FieldName = fieldName,
+                FilterExpression = defaultFilter
+            });
 
-            return DbSetConfigurations
-                .Where(dsc => dsc.SetOption == SetOption.IncludeAsFieldAndChild || dsc.SetOption == SetOption.IncludeAsFieldOnly)
-                .Select(dsc => dsc.Type);
-        }
-
-        public bool CanBeAChild(Type type)
-        {
-            return DbSetConfigurations
-                .Any(dsc => dsc.Type == type &&
-                            (dsc.SetOption == SetOption.IncludeAsChildOnly ||
-                             dsc.SetOption == SetOption.IncludeAsFieldAndChild));
+            return this;
         }
     }
 }

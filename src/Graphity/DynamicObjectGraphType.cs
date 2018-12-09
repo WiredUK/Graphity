@@ -7,9 +7,9 @@ namespace Graphity
     public class DynamicObjectGraphType<TContext, TEntity> : ObjectGraphType<TEntity>
         where TContext : DbContext
     {
-        public DynamicObjectGraphType(string name)
+        public DynamicObjectGraphType(string fieldName)
         {
-            Name = name;
+            Name = fieldName;
 
             var properties = typeof(TEntity)
                 .GetProperties();

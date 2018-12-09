@@ -35,7 +35,9 @@ Here are some things I'd like to get working:
 
 * *Add multiple include levels*: Currently Graphity only lets you go a single level deep, I'd like to extend this to add the Entity Framework includes to any level based on what you have asked for in the query.
 * *Advanced configuration*: The ability to further configure the graph, for example:
-  * Name the fields.
+  * ~~Name the query.~~
+  * ~~Name the fields.~~
+  * ~~Name the types.~~
   * Name individual properties.
   * Exclude properties from the graph.
 * *Add unit testing*: Yeah, this should have been done already...

@@ -40,10 +40,7 @@ namespace Graphity
                 throw new GraphityException("Unable to configure Graphity when the context service hasn't been registered");
             }
 
-            var queryOptions = new QueryOptions<TContext>
-            {
-                ServiceLifetime = contextService.Lifetime
-            };
+            var queryOptions = new QueryOptions<TContext>();
 
             setupAction?.Invoke(queryOptions);
             DynamicQuery<TContext>.QueryOptions = queryOptions;
@@ -60,12 +57,12 @@ namespace Graphity
             GraphTypeTypeRegistry.Register<Comparison, ComparisonType>();
             GraphTypeTypeRegistry.Register<WhereExpression, WhereExpressionType>();
 
-            foreach (var type in queryOptions.GetFields())
+            foreach (var field in queryOptions.GetFields())
             {
-                var graphType = typeof(DynamicObjectGraphType<,>).MakeGenericType(typeof(TContext), type);
+                var graphType = typeof(DynamicObjectGraphType<,>).MakeGenericType(typeof(TContext), field.Type);
 
                 services.AddSingleton(graphType,
-                    Activator.CreateInstance(graphType, $"{type.Name}Type"));
+                    Activator.CreateInstance(graphType, field.TypeName));
             }
 
             return services;
