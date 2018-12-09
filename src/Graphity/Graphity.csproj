@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.9.1</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.9.2</Version>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>A .NET Core library that integrates GraphQL and Entity Framework Core with minimal effort</Description>
     <PackageProjectUrl>https://github.com/WiredUK/Graphity</PackageProjectUrl>
     <PackageIconUrl>http://david.glass/w-logo.png</PackageIconUrl>
@@ -11,6 +11,7 @@
     <PackageReleaseNotes>Added dynamic expression creation to only select relevant columns, and a fluent configuration interface</PackageReleaseNotes>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <AssemblyVersion>0.9.2.0</AssemblyVersion>
+    <FileVersion>0.9.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
