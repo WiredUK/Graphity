@@ -18,7 +18,7 @@ The aim of this project is to provide a GraphQL endpoint by providing only the D
 
 ## That's it?!
 
-Yeah, like I said above the idea is to be able to get up and running with minimal code. Of course you can configure the graph further by manually specifying exactly what you want to expose. For example:
+The idea behind Graphity is to be able to get up and running with minimal code. Of course you can configure the graph further by manually specifying exactly what you want to expose. For example:
 
     services.AddGraphity<AnimalContext>(options =>
     {
@@ -27,8 +27,15 @@ Yeah, like I said above the idea is to be able to get up and running with minima
             .ConfigureSet(ctx => ctx.Countries, SetOption.IncludeAsFieldOnly);
     });
 
-With this code, no matter how many `DbSet`s you have in your context, the graph will only expose the ones mentioned here.
+With this code, no matter how many `DbSet`s you have in your context, the graph will only expose the ones configured here.
 
+You can also apply some default filters to your sets. For example, perhaps you only want to query on rows where the `Active` column is set to `true`, that would look something like this:
+
+    services.AddGraphity<AnimalContext>(options =>
+    {
+        options
+            .ConfigureSet(ctx => ctx.Animals, defaultFilter: a => a.Active == true);
+    });
 ## TODO
 
 Here are some things I'd like to get working:
