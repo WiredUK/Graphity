@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Graphity.Options;
 using Graphity.Where;
 using GraphQL;
 using GraphQL.Types;
@@ -30,7 +31,7 @@ namespace Graphity
         /// <param name="services"></param>
         /// <param name="setupAction">Use this to configure the graph.</param>
         /// <returns></returns>
-        public static IServiceCollection AddGraphity<TContext>(this IServiceCollection services, Action<QueryOptions<TContext>> setupAction)
+        public static IServiceCollection AddGraphity<TContext>(this IServiceCollection services, Action<IQueryOptions<TContext>> setupAction)
             where TContext : DbContext
         {
             var contextService = services.SingleOrDefault(sd => sd.ImplementationType == typeof(TContext));

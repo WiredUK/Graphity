@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
-namespace Graphity
+namespace Graphity.Options
 {
     internal static class QueryOptionsExtensions
     {
-        internal static IEnumerable<DbSetConfiguration> GetFields<TContext>(this QueryOptions<TContext> options)
+        internal static IEnumerable<IDbSetConfiguration> GetFields<TContext>(this IQueryOptions<TContext> options)
             where TContext : DbContext
         {
             var dbSetProperties = typeof(TContext)
@@ -31,7 +31,7 @@ namespace Graphity
                               dsc.SetOption == SetOption.IncludeAsFieldOnly);
         }
 
-        internal static bool CanBeAChild<TContext>(this QueryOptions<TContext> options, Type type)
+        internal static bool CanBeAChild<TContext>(this IQueryOptions<TContext> options, Type type)
             where TContext : DbContext
         {
             return options.DbSetConfigurations

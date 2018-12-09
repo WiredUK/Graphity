@@ -31,10 +31,13 @@ namespace AspNetWebApi
 
             services.AddGraphity<AnimalContext>(options =>
             {
-                options
-                    .QueryName("AnimalsQuery")
-                    .ConfigureSet(ctx => ctx.Animals, "filteredAnimals", defaultFilter: a => a.Id > 1)
-                    .ConfigureSet(ctx => ctx.Countries);
+                options.QueryName("AnimalsQuery");
+
+                options.ConfigureSet(ctx => ctx.Animals)
+                    .FieldName("filteredAnimals")
+                    .FilterExpression(a => a.Id > 1);
+
+                options.ConfigureSet(ctx => ctx.Countries);
             });
         }
 

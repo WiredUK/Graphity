@@ -36,6 +36,24 @@ You can also apply some default filters to your sets. For example, perhaps you o
         options
             .ConfigureSet(ctx => ctx.Animals, defaultFilter: a => a.Active == true);
     });
+
+Or another example demonstrating the fluent interface:
+
+    services.AddGraphity<AnimalContext>(options =>
+    {
+        options.QueryName("AnimalsQuery");
+
+        options.ConfigureSet(ctx => ctx.Animals)
+            .FieldName("filteredAnimals")
+            .FilterExpression(a => a.Id > 1);
+
+        options.ConfigureSet(ctx => ctx.Countries);
+    });
+
+## Entity Framework Queries
+
+Another aim of this project is to construct the Entity Framework queries to be as efficient as possible. One of the way we do that is to `Include` the relevant child entities and only `Select` the properties we need.
+
 ## TODO
 
 Here are some things I'd like to get working:

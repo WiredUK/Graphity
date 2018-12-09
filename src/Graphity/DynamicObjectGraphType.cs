@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Graphity.Options;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 

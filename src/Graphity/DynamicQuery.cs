@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Graphity.Options;
 using Graphity.Where;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ namespace Graphity
     {
         private readonly IScopedDependencyResolver _resolver;
 
-        internal static QueryOptions<TContext> QueryOptions { get; set; }
+        internal static IQueryOptions<TContext> QueryOptions { get; set; }
 
         public DynamicQuery(IScopedDependencyResolver resolver)
         {
@@ -49,13 +50,13 @@ namespace Graphity
                         $"{dbSetProperty.FieldName} of type {dbSetProperty.TypeName}",
                         new QueryArguments(whereArgument),
                         (Func<ResolveFieldContext<object>, object>) (resolveContext =>
-                            GetDataFromContext(dbSetProperty.Type, resolveContext, dbSetProperty.FilterExpression)),
+                            GetDataFromContext(dbSetProperty.Type, resolveContext, dbSetProperty)),
                         null
                     });
             }
         }
 
-        private object GetDataFromContext(Type type, ResolveFieldContext<object> resolveContext, Expression filterExpression)
+        private object GetDataFromContext(Type type, ResolveFieldContext<object> resolveContext, IDbSetConfiguration dbSetConfiguration)
         {
             var getDataMethod = typeof(DynamicQuery<TContext>)
                 .GetMethod("GetTypedDataFromContext", BindingFlags.NonPublic | BindingFlags.Static);
@@ -66,21 +67,24 @@ namespace Graphity
             using (var scope = _resolver.CreateScope())
             {
                 var context = scope.ServiceProvider.GetService<TContext>();
-                return getDataMethod.Invoke(null, new object[] { context, resolveContext, filterExpression });
+                return getDataMethod.Invoke(null, new object[] { context, resolveContext, dbSetConfiguration });
             }
         }
 
         // ReSharper disable once UnusedMember.Local
-        private static IEnumerable<T> GetTypedDataFromContext<T>(DbContext context, ResolveFieldContext resolveContext, Expression<Func<T, bool>> filterExpression)
-            where T : class
+        private static IEnumerable<object> GetTypedDataFromContext<TEntity>(
+            DbContext context, 
+            ResolveFieldContext resolveContext,
+            IDbSetConfiguration dbSetConfiguration)
+            where TEntity : class
         {
-            IQueryable<T> query = context.Set<T>();
+            IQueryable<TEntity> query = context.Set<TEntity>();
 
             foreach (var subField in resolveContext.SubFields)
             {
                 if (subField.Value.SelectionSet?.Children.Any() == true)
                 {
-                    var actualName = typeof(T)
+                    var actualName = typeof(TEntity)
                         .GetProperties()
                         .First(p => p.Name.Equals(subField.Key, StringComparison.OrdinalIgnoreCase))
                         .Name;
@@ -89,9 +93,9 @@ namespace Graphity
                 }
             }
 
-            if (filterExpression != null)
+            if (dbSetConfiguration.FilterExpression != null)
             {
-                query = query.Where(filterExpression);
+                query = query.Where((Expression<Func<TEntity, bool>>)dbSetConfiguration.FilterExpression);
             }
 
             if (resolveContext.Arguments.ContainsKey("where"))
@@ -100,7 +104,7 @@ namespace Graphity
 
                 foreach (var whereExpression in whereExpressions)
                 {
-                    var expression = ComparisonExpressions.GetComparisonExpression<T>(
+                    var expression = ComparisonExpressions.GetComparisonExpression<TEntity>(
                         whereExpression.Comparison,
                         whereExpression.Path, 
                         whereExpression.Value);
@@ -109,7 +113,33 @@ namespace Graphity
                 }
             }
 
-            return query.ToList();
+            return query
+                .Select(GetProjectionExpression<TEntity>(resolveContext))
+                .ToList();
+        }
+
+        private static Expression<Func<TEntity, TEntity>> GetProjectionExpression<TEntity>(ResolveFieldContext resolveContext)
+        {
+            var parameterExp = Expression.Parameter(typeof(TEntity), "entity");
+            var newExpression = Expression.New(typeof(TEntity));
+            var memberInitExpression = Expression.MemberInit(
+                newExpression, 
+                GetBindings<TEntity>(parameterExp, resolveContext));
+
+            return Expression.Lambda<Func<TEntity, TEntity>>(memberInitExpression, parameterExp);
+        }
+
+        private static IEnumerable<MemberBinding> GetBindings<TEntity>(ParameterExpression parameterExp, ResolveFieldContext resolveContext)
+        {
+            foreach (var subField in resolveContext.SubFields)
+            {
+                var paramExpression = Expression.Property(parameterExp, subField.Value.Name);
+                var mi = typeof(TEntity).GetProperties()
+                    .Single(pi => pi.Name.Equals(subField.Value.Name, StringComparison.OrdinalIgnoreCase));
+
+                yield return Expression.Bind(mi, paramExpression);
+            }
+
         }
     }
 }

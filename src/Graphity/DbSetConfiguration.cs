@@ -3,27 +3,27 @@ using System.Linq.Expressions;
 
 namespace Graphity
 {
-    internal class DbSetConfiguration
+    public class DbSetConfiguration : IDbSetConfiguration
     {
         private string _fieldName;
         private string _typeName;
 
-        public Type Type { get; set; }
+        public Type Type { get; internal set; }
 
         public string TypeName
         {
             get => _typeName ?? $"{Type.Name}Type";
-            set => _typeName = value;
+            internal set => _typeName = value;
         }
 
         public string FieldName
         {
             get => _fieldName ?? Type.Name;
-            set => _fieldName = value;
+            internal set => _fieldName = value;
         }
 
-        public SetOption SetOption { get; set; }
+        public SetOption SetOption { get; internal set; }
 
-        public Expression FilterExpression { get; set; }
+        public Expression FilterExpression { get; internal set; }
     }
 }
