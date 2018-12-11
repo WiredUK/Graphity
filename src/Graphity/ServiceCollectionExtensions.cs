@@ -63,7 +63,7 @@ namespace Graphity
                 var graphType = typeof(DynamicObjectGraphType<,>).MakeGenericType(typeof(TContext), field.Type);
 
                 services.AddSingleton(graphType,
-                    Activator.CreateInstance(graphType, field.TypeName));
+                    Activator.CreateInstance(graphType, field));
             }
 
             return services;

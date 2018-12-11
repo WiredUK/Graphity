@@ -9,7 +9,7 @@ namespace Graphity.Options
         where TContext : DbContext
     {
         string Name { get; }
-        ICollection<IDbSetConfiguration> DbSetConfigurations { get; }
+        IReadOnlyCollection<IDbSetConfiguration> DbSetConfigurations { get; }
 
         IQueryOptions<TContext> QueryName(string name);
 

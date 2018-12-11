@@ -35,9 +35,12 @@ namespace AspNetWebApi
 
                 options.ConfigureSet(ctx => ctx.Animals)
                     .FieldName("filteredAnimals")
-                    .FilterExpression(a => a.Id > 1);
+                    .FilterExpression(a => a.Id > 1)
+                    .ConfigureProperty(a => a.Id).Exclude()
+                    .ConfigureProperty(a => a.LivesInId).Exclude();
 
-                options.ConfigureSet(ctx => ctx.Countries);
+                options.ConfigureSet(ctx => ctx.Countries)
+                    .ConfigureProperty(c => c.Id).Exclude();
             });
         }
 

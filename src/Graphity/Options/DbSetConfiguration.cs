@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Graphity
+namespace Graphity.Options
 {
     public class DbSetConfiguration : IDbSetConfiguration
     {
         private string _fieldName;
         private string _typeName;
+
+        public DbSetConfiguration()
+        {
+            PropertyConfigurations = new List<IPropertyConfiguration>();
+        }
 
         public Type Type { get; internal set; }
 
@@ -25,5 +31,8 @@ namespace Graphity
         public SetOption SetOption { get; internal set; }
 
         public Expression FilterExpression { get; internal set; }
+
+        public IReadOnlyCollection<IPropertyConfiguration> PropertyConfigurations { get; }
+
     }
 }

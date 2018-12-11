@@ -2,21 +2,27 @@
 using Graphity.Options;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Graphity
 {
     public class DynamicObjectGraphType<TContext, TEntity> : ObjectGraphType<TEntity>
         where TContext : DbContext
     {
-        public DynamicObjectGraphType(string fieldName)
+        public DynamicObjectGraphType(IDbSetConfiguration configuration)
         {
-            Name = fieldName;
+            Name = configuration.TypeName;
 
             var properties = typeof(TEntity)
                 .GetProperties();
 
             foreach (var property in properties)
             {
+                if (configuration.PropertyConfigurations.Any(pc => pc.PropertyName == property.Name && pc.Exclude))
+                {
+                    continue;
+                }
+
                 if (property.PropertyType == typeof(string))
                 {
                     Field<StringGraphType>(property.Name);

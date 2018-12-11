@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Graphity.Options
 {
-    public class DbSetConfigurationQueryOptions<TContext, TProperty> : IDbSetConfigurationQueryOptions<TContext, TProperty>
+    public class DbSetConfigurationQueryOptions<TContext, TEntity> : IDbSetConfigurationQueryOptions<TContext, TEntity>
         where TContext : DbContext
-        where TProperty : class
+        where TEntity : class
     {
         private readonly QueryOptions<TContext> _options;
         private readonly DbSetConfiguration _dbSetConfiguration;
@@ -19,10 +19,10 @@ namespace Graphity.Options
         }
 
         public string Name => _options.Name;
-        public ICollection<IDbSetConfiguration> DbSetConfigurations => _options.DbSetConfigurations;
+        public IReadOnlyCollection<IDbSetConfiguration> DbSetConfigurations => _options.DbSetConfigurations;
 
-        public DbSetConfigurationQueryOptions<TContext, TProperty> Filter(
-            Expression<Func<TProperty, bool>> defaultFilter)
+        public DbSetConfigurationQueryOptions<TContext, TEntity> Filter(
+            Expression<Func<TEntity, bool>> defaultFilter)
         {
             _dbSetConfiguration.FilterExpression = defaultFilter;
             return this;
@@ -33,13 +33,13 @@ namespace Graphity.Options
             return _options.QueryName(name);
         }
 
-        public IDbSetConfigurationQueryOptions<TContext, TProperty> FieldName(string name)
+        public IDbSetConfigurationQueryOptions<TContext, TEntity> FieldName(string name)
         {
             _dbSetConfiguration.FieldName = name;
             return this;
         }
 
-        public IDbSetConfigurationQueryOptions<TContext, TProperty> TypeName(string name)
+        public IDbSetConfigurationQueryOptions<TContext, TEntity> TypeName(string name)
         {
             _dbSetConfiguration.TypeName = name;
             return this;
@@ -54,11 +54,25 @@ namespace Graphity.Options
             return _options.ConfigureSet(dbSetExpression, fieldName, setOption, defaultFilter);
         }
 
-
-        public IDbSetConfigurationQueryOptions<TContext, TProperty> FilterExpression(Expression<Func<TProperty, bool>> defaultFilter)
+        public IDbSetConfigurationQueryOptions<TContext, TEntity> FilterExpression(Expression<Func<TEntity, bool>> defaultFilter)
         {
             _dbSetConfiguration.FilterExpression = defaultFilter;
             return this;
         }
+
+        public IPropertyConfigurationQueryOptions<TContext, TEntity, TProperty> ConfigureProperty<TProperty>(Expression<Func<TEntity, TProperty>> propertyExpression)
+        {
+            var propertyConfiguration = new PropertyConfiguration
+            {
+                PropertyExpression = propertyExpression
+            };
+
+            ((List<IPropertyConfiguration>) _dbSetConfiguration.PropertyConfigurations).Add(propertyConfiguration);
+
+            return new PropertyConfigurationQueryOptions<TContext, TEntity, TProperty>(this, _dbSetConfiguration, propertyConfiguration);
+        }
+
+        public IReadOnlyCollection<IPropertyConfiguration> PropertyConfigurations =>
+            _dbSetConfiguration.PropertyConfigurations;
     }
 }

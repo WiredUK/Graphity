@@ -1,16 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Graphity.Options
 {
-    public interface IDbSetConfigurationQueryOptions<TContext, TProperty> : IQueryOptions<TContext>
+    public interface IDbSetConfigurationQueryOptions<TContext, TEntity> : IQueryOptions<TContext>
         where TContext : DbContext
     {
-        IDbSetConfigurationQueryOptions<TContext, TProperty> FieldName(string name);
-        IDbSetConfigurationQueryOptions<TContext, TProperty> TypeName(string name);
+        IDbSetConfigurationQueryOptions<TContext, TEntity> FieldName(string name);
+        IDbSetConfigurationQueryOptions<TContext, TEntity> TypeName(string name);
 
-        IDbSetConfigurationQueryOptions<TContext, TProperty> FilterExpression(
-            Expression<Func<TProperty, bool>> defaultFilter);
+        IDbSetConfigurationQueryOptions<TContext, TEntity> FilterExpression(
+            Expression<Func<TEntity, bool>> defaultFilter);
+
+        IPropertyConfigurationQueryOptions<TContext, TEntity, TProperty> ConfigureProperty<TProperty>(
+            Expression<Func<TEntity, TProperty>> propertyExpression);
+
+        IReadOnlyCollection<IPropertyConfiguration> PropertyConfigurations { get; }
     }
 }

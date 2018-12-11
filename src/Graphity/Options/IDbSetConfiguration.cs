@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Graphity
+namespace Graphity.Options
 {
     public interface IDbSetConfiguration
     {
@@ -10,5 +11,6 @@ namespace Graphity
         string FieldName { get; }
         SetOption SetOption { get; }
         Expression FilterExpression { get; }
+        IReadOnlyCollection<IPropertyConfiguration> PropertyConfigurations { get; }
     }
 }

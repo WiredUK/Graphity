@@ -8,7 +8,7 @@ namespace Graphity.Options
     public class QueryOptions<TContext> : IQueryOptions<TContext>
         where TContext : DbContext
     {
-        public ICollection<IDbSetConfiguration> DbSetConfigurations { get; }
+        public IReadOnlyCollection<IDbSetConfiguration> DbSetConfigurations { get; }
         public string Name { get; private set; }
 
         internal QueryOptions()
@@ -48,7 +48,7 @@ namespace Graphity.Options
                 FilterExpression = defaultFilter
             };
 
-            DbSetConfigurations.Add(dbSetConfiguration);
+            ((List<IDbSetConfiguration>)DbSetConfigurations).Add(dbSetConfiguration);
 
             return new DbSetConfigurationQueryOptions<TContext, TProperty>(this, dbSetConfiguration);
         }
