@@ -1,0 +1,19 @@
+﻿@model System.Collections.Generic.List<AspNetWebApi.Data.Animal>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Animals</title>
+</head>
+<body>
+<div>
+    @foreach (var animal in Model)
+    {
+        <div>
+            A @animal.Name lives in @animal.LivesIn.Name
+        </div>
+    }
+</div>
+</body>
+</html>

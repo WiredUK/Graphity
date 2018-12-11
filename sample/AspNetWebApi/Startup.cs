@@ -57,7 +57,7 @@ namespace AspNetWebApi
             app.UseGraphity();
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

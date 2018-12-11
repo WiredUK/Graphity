@@ -1,0 +1,25 @@
+﻿@model System.Linq.IQueryable<AspNetWebApi.Data.Country>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Countries</title>
+</head>
+<body>
+<div>
+    @foreach (var country in Model)
+    {
+        <div>
+            @country has the following animals:
+            <ul>
+                @foreach (var animal in country.Animals)
+                {
+                    <li>@animal.Name</li>
+                }
+            </ul>
+        </div>
+    }
+</div>
+</body>
+</html>

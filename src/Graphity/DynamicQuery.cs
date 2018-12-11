@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Graphity.Options;
 using Graphity.Where;
+using GraphQL.Language.AST;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,7 +44,7 @@ namespace Graphity
                                   mi.GetParameters().Length == 5);
 
                 var fieldMethod = genericFieldMethod.MakeGenericMethod(listGraphType);
-                
+
                 fieldMethod.Invoke(this,
                     new object[]
                     {
@@ -56,10 +58,11 @@ namespace Graphity
             }
         }
 
-        private object GetDataFromContext(Type type, ResolveFieldContext<object> resolveContext, IDbSetConfiguration dbSetConfiguration)
+        private object GetDataFromContext(Type type, ResolveFieldContext<object> resolveContext,
+            IDbSetConfiguration dbSetConfiguration)
         {
             var getDataMethod = typeof(DynamicQuery<TContext>)
-                .GetMethod("GetTypedDataFromContext", BindingFlags.NonPublic | BindingFlags.Static);
+                .GetMethod(nameof(GetTypedDataFromContext), BindingFlags.NonPublic | BindingFlags.Instance);
 
             // ReSharper disable once PossibleNullReferenceException
             getDataMethod = getDataMethod.MakeGenericMethod(type);
@@ -67,35 +70,22 @@ namespace Graphity
             using (var scope = _resolver.CreateScope())
             {
                 var context = scope.ServiceProvider.GetService<TContext>();
-                return getDataMethod.Invoke(null, new object[] { context, resolveContext, dbSetConfiguration });
+                return getDataMethod.Invoke(this, new object[] {context, resolveContext, dbSetConfiguration});
             }
         }
 
         // ReSharper disable once UnusedMember.Local
-        private static IEnumerable<object> GetTypedDataFromContext<TEntity>(
-            DbContext context, 
+        private IEnumerable<object> GetTypedDataFromContext<TEntity>(
+            DbContext context,
             ResolveFieldContext resolveContext,
             IDbSetConfiguration dbSetConfiguration)
             where TEntity : class
         {
             IQueryable<TEntity> query = context.Set<TEntity>();
 
-            foreach (var subField in resolveContext.SubFields)
-            {
-                if (subField.Value.SelectionSet?.Children.Any() == true)
-                {
-                    var actualName = typeof(TEntity)
-                        .GetProperties()
-                        .First(p => p.Name.Equals(subField.Key, StringComparison.OrdinalIgnoreCase))
-                        .Name;
-
-                    query = query.Include(actualName);
-                }
-            }
-
             if (dbSetConfiguration.FilterExpression != null)
             {
-                query = query.Where((Expression<Func<TEntity, bool>>)dbSetConfiguration.FilterExpression);
+                query = query.Where((Expression<Func<TEntity, bool>>) dbSetConfiguration.FilterExpression);
             }
 
             if (resolveContext.Arguments.ContainsKey("where"))
@@ -106,40 +96,98 @@ namespace Graphity
                 {
                     var expression = ComparisonExpressions.GetComparisonExpression<TEntity>(
                         whereExpression.Comparison,
-                        whereExpression.Path, 
+                        whereExpression.Path,
                         whereExpression.Value);
 
                     query = query.Where(expression);
                 }
             }
 
+            var projectionExpression = (Expression<Func<TEntity, TEntity>>)GetProjectionExpression(typeof(TEntity), resolveContext.SubFields.Values);
+
             return query
-                .Select(GetProjectionExpression<TEntity>(resolveContext))
+                .Select(projectionExpression)
                 .ToList();
         }
 
-        private static Expression<Func<TEntity, TEntity>> GetProjectionExpression<TEntity>(ResolveFieldContext resolveContext)
-        {
-            var parameterExp = Expression.Parameter(typeof(TEntity), "entity");
-            var newExpression = Expression.New(typeof(TEntity));
-            var memberInitExpression = Expression.MemberInit(
-                newExpression, 
-                GetBindings<TEntity>(parameterExp, resolveContext));
+        private int _entityCounter;
 
-            return Expression.Lambda<Func<TEntity, TEntity>>(memberInitExpression, parameterExp);
+        private Expression GetProjectionExpression(Type type, IEnumerable<Field> fields)
+        {
+            _entityCounter++;
+
+            var parameterExp = Expression.Parameter(type, $"e{_entityCounter}");
+            var newExpression = Expression.New(type);
+            var memberInitExpression = Expression.MemberInit(
+                newExpression,
+                GetBindings(type, parameterExp, fields));
+
+            return Expression.Lambda(memberInitExpression, parameterExp);
         }
 
-        private static IEnumerable<MemberBinding> GetBindings<TEntity>(ParameterExpression parameterExp, ResolveFieldContext resolveContext)
+        private IEnumerable<MemberBinding> GetBindings(Type type, Expression parameterExp,
+            IEnumerable<Field> fields)
         {
-            foreach (var subField in resolveContext.SubFields)
-            {
-                var paramExpression = Expression.Property(parameterExp, subField.Value.Name);
-                var mi = typeof(TEntity).GetProperties()
-                    .Single(pi => pi.Name.Equals(subField.Value.Name, StringComparison.OrdinalIgnoreCase));
+            return fields
+                .Select(subField => GetBinding(type, parameterExp, subField))
+                .ToList();
+        }
 
-                yield return Expression.Bind(mi, paramExpression);
+        private MemberBinding GetBinding(Type type, Expression parameterExp, Field subField)
+        {
+            var mi = type.GetProperties()
+                .Single(pi => pi.Name.Equals(subField.Name, StringComparison.OrdinalIgnoreCase));
+
+            if (mi.PropertyType.IsGenericType && typeof(IEnumerable).IsAssignableFrom(mi.PropertyType))
+            {
+                return GetSelectMemberBinding(parameterExp, subField, mi);
             }
 
+            if (mi.PropertyType.IsClass && mi.PropertyType != typeof(string))
+            {
+                return GetClassMemberBinding(parameterExp, subField, mi);
+            }
+
+            return GetDefaultMemberBinding(parameterExp, subField, mi);
+        }
+
+        private static MemberBinding GetDefaultMemberBinding(Expression parameterExp, Field subField, PropertyInfo mi)
+        {
+            var paramExpression = Expression.Property(parameterExp, subField.Name);
+            return Expression.Bind(mi, paramExpression);
+        }
+
+        private MemberBinding GetClassMemberBinding(Expression parameterExp, Field subField, PropertyInfo mi)
+        {
+            var innerParameterExp = Expression.Property(parameterExp, subField.Name);
+            var newExpression = Expression.New(mi.PropertyType);
+            var memberInitExpression = Expression.MemberInit(
+                newExpression,
+                GetBindings(mi.PropertyType, innerParameterExp, subField.SelectionSet.Children.OfType<Field>()));
+
+            return Expression.Bind(mi, memberInitExpression);
+        }
+
+        private MemberBinding GetSelectMemberBinding(Expression parameterExp, Field subField, PropertyInfo mi)
+        {
+            var selectParamExpression = Expression.Property(parameterExp, subField.Name);
+
+            var enumerableType = mi.PropertyType.GetGenericArguments()[0];
+            var child = GetProjectionExpression(enumerableType, subField.SelectionSet.Children.OfType<Field>());
+
+            var selectExpression = Expression.Call(
+                typeof(Enumerable),
+                nameof(Enumerable.Select),
+                new[] { enumerableType, enumerableType },
+                selectParamExpression, child);
+
+            var toListExpression = Expression.Call(
+                typeof(Enumerable),
+                nameof(Enumerable.ToList),
+                new[] { enumerableType },
+                selectExpression);
+
+            return Expression.Bind(mi, toListExpression);
         }
     }
 }

@@ -58,12 +58,11 @@ Another aim of this project is to construct the Entity Framework queries to be a
 
 Here are some things I'd like to get working:
 
-* *Add multiple include levels*: Currently Graphity only lets you go a single level deep, I'd like to extend this to add the Entity Framework includes to any level based on what you have asked for in the query. (I have a feeling this might not be needed if we build the EF expressions correctly)
 * *Advanced configuration*: The ability to further configure the graph, for example:
   * ~~Name the query.~~
   * ~~Name the fields.~~
   * ~~Name the types.~~
-  * Name individual properties. (though this might make the dynamic expression building awkward)
+  * Name individual properties. (though this might make the dynamic expression building awkward which makes this low priority)
   * Exclude properties from the graph.
 * *Add unit testing*: Yeah, this should have been done already...
 
