@@ -30,7 +30,7 @@ namespace Graphity.Options
 
         public SetOption SetOption { get; internal set; }
 
-        public Expression FilterExpression { get; internal set; }
+        public LambdaExpression FilterExpression { get; internal set; }
 
         public IReadOnlyCollection<IPropertyConfiguration> PropertyConfigurations { get; }
 

@@ -21,7 +21,7 @@ namespace Graphity.Options
         public string Name => _options.Name;
         public IReadOnlyCollection<IDbSetConfiguration> DbSetConfigurations => _options.DbSetConfigurations;
 
-        public DbSetConfigurationQueryOptions<TContext, TEntity> Filter(
+        public IDbSetConfigurationQueryOptions<TContext, TEntity> Filter(
             Expression<Func<TEntity, bool>> defaultFilter)
         {
             _dbSetConfiguration.FilterExpression = defaultFilter;
@@ -54,17 +54,11 @@ namespace Graphity.Options
             return _options.ConfigureSet(dbSetExpression, fieldName, setOption, defaultFilter);
         }
 
-        public IDbSetConfigurationQueryOptions<TContext, TEntity> FilterExpression(Expression<Func<TEntity, bool>> defaultFilter)
-        {
-            _dbSetConfiguration.FilterExpression = defaultFilter;
-            return this;
-        }
-
         public IPropertyConfigurationQueryOptions<TContext, TEntity, TProperty> ConfigureProperty<TProperty>(Expression<Func<TEntity, TProperty>> propertyExpression)
         {
             var propertyConfiguration = new PropertyConfiguration
             {
-                PropertyExpression = propertyExpression
+                PropertyExpression = (MemberExpression)propertyExpression.Body
             };
 
             ((List<IPropertyConfiguration>) _dbSetConfiguration.PropertyConfigurations).Add(propertyConfiguration);

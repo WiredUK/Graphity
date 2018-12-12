@@ -54,7 +54,7 @@ services.AddGraphity<AnimalContext>(options =>
 
     options.ConfigureSet(ctx => ctx.Animals)
         .FieldName("filteredAnimals")  //Name the field
-        .FilterExpression(a => a.Id > 5) //Exclude all animals with Id of 5 or less
+        .Filter(a => a.Active == true) //Exclude all inactive animals
         .ConfigureProperty(a => a.Id).Exclude() //Hide the Id column from the graph
         .ConfigureProperty(a => a.LivesInId).Exclude(); //Hide the LivesInId column from the graph
 

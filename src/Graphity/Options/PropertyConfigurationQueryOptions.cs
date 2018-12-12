@@ -51,7 +51,7 @@ namespace Graphity.Options
             return this;
         }
 
-        public IDbSetConfigurationQueryOptions<TContext, TEntity> FilterExpression(Expression<Func<TEntity, bool>> defaultFilter)
+        public IDbSetConfigurationQueryOptions<TContext, TEntity> Filter(Expression<Func<TEntity, bool>> defaultFilter)
         {
             _dbSetConfiguration.FilterExpression = defaultFilter;
             return this;

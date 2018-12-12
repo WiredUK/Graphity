@@ -11,7 +11,7 @@ namespace Graphity.Options
         IDbSetConfigurationQueryOptions<TContext, TEntity> FieldName(string name);
         IDbSetConfigurationQueryOptions<TContext, TEntity> TypeName(string name);
 
-        IDbSetConfigurationQueryOptions<TContext, TEntity> FilterExpression(
+        IDbSetConfigurationQueryOptions<TContext, TEntity> Filter(
             Expression<Func<TEntity, bool>> defaultFilter);
 
         IPropertyConfigurationQueryOptions<TContext, TEntity, TProperty> ConfigureProperty<TProperty>(

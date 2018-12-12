@@ -10,7 +10,7 @@ namespace Graphity.Options
         string TypeName { get; }
         string FieldName { get; }
         SetOption SetOption { get; }
-        Expression FilterExpression { get; }
+        LambdaExpression FilterExpression { get; }
         IReadOnlyCollection<IPropertyConfiguration> PropertyConfigurations { get; }
     }
 }
