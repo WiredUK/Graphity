@@ -85,3 +85,7 @@ Here are some things I'd like to get working:
 ## Contributing
 
 I am open to contributions but please open an issue and discuss it with me before you submit a pull request.
+
+## Get in Contact
+
+I love hearing from people who have tried out my projects, really makes it feel like a worthwhile endeavour. If you want to get in touch to say hi or comment about this (or any other projects) or even have any suggestions, please use the details in [my profile](https://github.com/WiredUK). 
