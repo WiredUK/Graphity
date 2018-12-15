@@ -6,13 +6,19 @@ The aim of this project is to provide a GraphQL endpoint by providing only the D
 ## How to use Graphity
 
 1. Set up your DbContext as you would normally, ensuring it has been added to the DI container.
-2. In your `ConfigureServices` method in `Startup`, add Graphity to your container:
+2. Add the [Graphity Nuget package](https://www.nuget.org/packages/Graphity) to your project using the Visual Studio Nuget Package manager or from the command line:
+
+    ```
+    dotnet add package graphiql
+    ```
+
+3. In your `ConfigureServices` method in `Startup`, add Graphity to your container:
 
     ```c#
     services.AddGraphity<YourDbContext>();
     ```
 
-3. Add the Graphity middleware to your pipeline, this needs to happen before MVC if you are using it. Add this line to the `Startup.Configure` method:
+4. Add the Graphity middleware to your pipeline, this needs to happen before MVC if you are using it. Add this line to the `Startup.Configure` method:
 
     ```c#
     app.UseGraphity();
