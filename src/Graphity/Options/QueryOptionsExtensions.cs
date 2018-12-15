@@ -27,8 +27,30 @@ namespace Graphity.Options
             }
 
             return options.DbSetConfigurations
-                .Where(dsc => dsc.SetOption == SetOption.IncludeAsFieldAndChild || 
+                .Where(dsc => dsc.SetOption == SetOption.IncludeAsFieldAndChild ||
                               dsc.SetOption == SetOption.IncludeAsFieldOnly);
+        }
+
+        internal static IEnumerable<IDbSetConfiguration> GetAllFields<TContext>(this IQueryOptions<TContext> options)
+            where TContext : DbContext
+        {
+            var dbSetProperties = typeof(TContext)
+                .GetProperties()
+                .Where(pi => pi.PropertyType.IsGenericType &&
+                             typeof(DbSet<>).IsAssignableFrom(pi.PropertyType.GetGenericTypeDefinition()));
+
+            if (!options.DbSetConfigurations.Any())
+            {
+                return dbSetProperties.Select(pi => new DbSetConfiguration
+                {
+                    SetOption = SetOption.IncludeAsFieldAndChild,
+                    Type = pi.PropertyType,
+                    TypeName = pi.Name,
+                    FieldName = pi.PropertyType.Name
+                });
+            }
+
+            return options.DbSetConfigurations;
         }
 
         internal static bool CanBeAChild<TContext>(this IQueryOptions<TContext> options, Type type)

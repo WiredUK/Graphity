@@ -58,13 +58,17 @@ namespace Graphity
             GraphTypeTypeRegistry.Register<Comparison, ComparisonType>();
             GraphTypeTypeRegistry.Register<WhereExpression, WhereExpressionType>();
 
-            foreach (var field in queryOptions.GetFields())
+            foreach (var field in queryOptions.GetAllFields())
             {
                 var graphType = typeof(DynamicObjectGraphType<,>).MakeGenericType(typeof(TContext), field.Type);
 
-                services.AddSingleton(graphType,
-                    Activator.CreateInstance(graphType, field));
+                Action<Type> typeRegistrar = type => services.AddSingleton(type);
+
+                services.AddSingleton(
+                    graphType,
+                    Activator.CreateInstance(graphType, field, typeRegistrar));
             }
+
 
             return services;
         }

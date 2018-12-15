@@ -1,15 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Graphity.Options;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using GraphQL;
 
 namespace Graphity
 {
     public class DynamicObjectGraphType<TContext, TEntity> : ObjectGraphType<TEntity>
         where TContext : DbContext
     {
-        public DynamicObjectGraphType(IDbSetConfiguration configuration)
+        public DynamicObjectGraphType(IDbSetConfiguration configuration, Action<Type> typeRegistrar)
         {
             Name = configuration.TypeName;
 
@@ -27,11 +29,79 @@ namespace Graphity
                 {
                     Field<StringGraphType>(property.Name);
                 }
-                else if (property.PropertyType == typeof(int))
+                else if (property.PropertyType == typeof(short) ||
+                         property.PropertyType == typeof(int) ||
+                         property.PropertyType == typeof(long))
+                {
+                    Field<NonNullGraphType<IntGraphType>>(property.Name);
+                }
+                else if (property.PropertyType == typeof(short?) ||
+                         property.PropertyType == typeof(int?) ||
+                         property.PropertyType == typeof(long?))
                 {
                     Field<IntGraphType>(property.Name);
                 }
-                else if(typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                else if (property.PropertyType == typeof(bool))
+                {
+                    Field<NonNullGraphType<BooleanGraphType>>(property.Name);
+                }
+                else if (property.PropertyType == typeof(bool?))
+                {
+                    Field<BooleanGraphType>(property.Name);
+                }
+                else if (property.PropertyType == typeof(double) ||
+                         property.PropertyType == typeof(float))
+                {
+                    Field<NonNullGraphType<FloatGraphType>>(property.Name);
+                }
+                else if (property.PropertyType == typeof(double?) ||
+                         property.PropertyType == typeof(float?))
+                {
+                    Field<FloatGraphType>(property.Name);
+                }
+                else if (property.PropertyType == typeof(decimal))
+                {
+                    Field<NonNullGraphType<DecimalGraphType>>(property.Name);
+                }
+                else if (property.PropertyType == typeof(decimal?))
+                {
+                    Field<DecimalGraphType>(property.Name);
+                }
+                else if (property.PropertyType == typeof(DateTime))
+                {
+                    Field<NonNullGraphType<DateTimeGraphType>>(property.Name);
+                }
+                else if (property.PropertyType == typeof(DateTime?))
+                {
+                    Field<DateTimeGraphType>(property.Name);
+                }
+                else if (property.PropertyType == typeof(DateTimeOffset))
+                {
+                    Field<NonNullGraphType<DateTimeOffsetGraphType>>(property.Name);
+                }
+                else if (property.PropertyType == typeof(DateTimeOffset?))
+                {
+                    Field<DateTimeOffsetGraphType>(property.Name);
+                }
+                else if (property.PropertyType == typeof(TimeSpan))
+                {
+                    Field<NonNullGraphType<TimeSpanSecondsGraphType>>(property.Name);
+                }
+                else if (property.PropertyType == typeof(TimeSpan?))
+                {
+                    Field<TimeSpanSecondsGraphType>(property.Name);
+                }
+                else if (property.PropertyType.IsEnum)
+                {
+                    var enumGraphType = typeof(EnumerationGraphType<>).MakeGenericType(property.PropertyType);
+                    var graphType = property.PropertyType.IsNullable()
+                        ? enumGraphType
+                        : typeof(NonNullGraphType<>).MakeGenericType(enumGraphType);
+
+                    Field(graphType, property.Name);
+                    typeRegistrar(enumGraphType);
+                }
+                else if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
                 {
                     var type = property.PropertyType.GetGenericArguments()[0];
 

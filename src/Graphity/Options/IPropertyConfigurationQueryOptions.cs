@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Graphity.Options
 {
@@ -7,5 +10,8 @@ namespace Graphity.Options
         where TContext : DbContext
     {
         IPropertyConfigurationQueryOptions<TContext, TEntity, TProperty> Exclude();
+
+        IPropertyConfigurationQueryOptions<TContext, TEntity, TProperty> FilterProperty(
+            Expression<Func<IEnumerable<TProperty>, bool>> propertyFilter);
     }
 }

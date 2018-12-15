@@ -6,6 +6,7 @@ namespace Graphity.Options
     {
         bool Exclude { get; }
         MemberExpression PropertyExpression { get; }
+        LambdaExpression FilterExpression { get; }
         string PropertyName { get; }
     }
 }

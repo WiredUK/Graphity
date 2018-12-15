@@ -1,4 +1,5 @@
-﻿using AspNetWebApi.Data;
+﻿using System.Linq;
+using AspNetWebApi.Data;
 using Graphity;
 using Graphity.Middleware;
 using Microsoft.AspNetCore.Builder;
@@ -41,6 +42,9 @@ namespace AspNetWebApi
 
                 options.ConfigureSet(ctx => ctx.Countries)
                     .ConfigureProperty(c => c.Id).Exclude();
+
+                options.ConfigureSet(ctx => ctx.CountryProperties, null, SetOption.IncludeAsChildOnly)
+                    .ConfigureProperty(cp => cp.CountryId).Exclude();
             });
         }
 
