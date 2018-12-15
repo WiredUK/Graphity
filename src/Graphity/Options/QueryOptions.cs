@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Graphity.Options
 {
-    public class QueryOptions<TContext> : IQueryOptions<TContext>
+    internal class QueryOptions<TContext> : IQueryOptions<TContext>
         where TContext : DbContext
     {
         public IReadOnlyCollection<IDbSetConfiguration> DbSetConfigurations { get; }

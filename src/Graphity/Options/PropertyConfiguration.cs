@@ -2,7 +2,7 @@
 
 namespace Graphity.Options
 {
-    public class PropertyConfiguration : IPropertyConfiguration
+    internal class PropertyConfiguration : IPropertyConfiguration
     {
         public bool Exclude { get; internal set; }
         public MemberExpression PropertyExpression { get; internal set; }

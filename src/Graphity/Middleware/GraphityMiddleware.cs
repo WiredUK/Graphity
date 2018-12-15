@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace Graphity.Middleware
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class GraphityMiddleware
+    internal class GraphityMiddleware
     {
         // ReSharper disable once UnusedParameter.Local
         public GraphityMiddleware(RequestDelegate next)

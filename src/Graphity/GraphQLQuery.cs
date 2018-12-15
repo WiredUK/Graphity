@@ -2,8 +2,7 @@
 
 namespace Graphity
 {
-
-    public class GraphQLQuery
+    internal class GraphQLQuery
     {
         public string OperationName { get; set; }
         public string Query { get; set; }

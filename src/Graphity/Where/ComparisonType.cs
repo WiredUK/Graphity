@@ -1,9 +1,8 @@
-﻿using System;
-using GraphQL.Types;
+﻿using GraphQL.Types;
 
 namespace Graphity.Where
 {
-    public class ComparisonType : EnumerationGraphType
+    internal class ComparisonType : EnumerationGraphType
     {
         public ComparisonType()
         {

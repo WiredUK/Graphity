@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Graphity
 {
-    public interface IScopedDependencyResolver : IDependencyResolver
+    internal interface IScopedDependencyResolver : IDependencyResolver
     {
         IServiceScope CreateScope();
     }

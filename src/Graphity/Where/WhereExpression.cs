@@ -1,6 +1,6 @@
 ﻿namespace Graphity.Where
 {
-    public class WhereExpression
+    internal class WhereExpression
     {
         public string Path { get; set; }
         public Comparison Comparison { get; set; }

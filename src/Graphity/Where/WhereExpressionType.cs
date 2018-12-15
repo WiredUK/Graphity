@@ -2,7 +2,7 @@
 
 namespace Graphity.Where
 {
-    public class WhereExpressionType : InputObjectGraphType<WhereExpression>
+    internal class WhereExpressionType : InputObjectGraphType<WhereExpression>
     {
         public WhereExpressionType()
         {

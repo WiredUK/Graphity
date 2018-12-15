@@ -8,7 +8,7 @@ using GraphQL;
 
 namespace Graphity
 {
-    public class DynamicObjectGraphType<TContext, TEntity> : ObjectGraphType<TEntity>
+    internal class DynamicObjectGraphType<TContext, TEntity> : ObjectGraphType<TEntity>
         where TContext : DbContext
     {
         public DynamicObjectGraphType(IDbSetConfiguration configuration, Action<Type> typeRegistrar)

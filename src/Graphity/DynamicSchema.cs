@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace Graphity
 {
-    public class DynamicSchema<TContext> : Schema
+    internal class DynamicSchema<TContext> : Schema
         where TContext : DbContext
     {
         public DynamicSchema(IScopedDependencyResolver resolver)

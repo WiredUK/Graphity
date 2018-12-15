@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Graphity.Where
 {
-    public static class ComparisonExpressions
+    internal static class ComparisonExpressions
     {
         public static Expression<Func<T, bool>> GetComparisonExpression<T>(Comparison comparison, string propertyName,
             string propertyValue)

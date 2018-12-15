@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Graphity.Options
 {
-    public class DbSetConfiguration : IDbSetConfiguration
+    internal class DbSetConfiguration : IDbSetConfiguration
     {
         private string _fieldName;
         private string _typeName;

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Graphity.Options
 {
-    public class PropertyConfigurationQueryOptions<TContext, TEntity, TProperty>
+    internal class PropertyConfigurationQueryOptions<TContext, TEntity, TProperty>
         : IPropertyConfigurationQueryOptions<TContext, TEntity, TProperty>
         where TContext : DbContext
         where TEntity : class

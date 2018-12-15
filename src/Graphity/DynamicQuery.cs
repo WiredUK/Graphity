@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Graphity
 {
-    public class DynamicQuery<TContext> : ObjectGraphType<object>
+    internal class DynamicQuery<TContext> : ObjectGraphType<object>
         where TContext : DbContext
     {
         private readonly IScopedDependencyResolver _resolver;

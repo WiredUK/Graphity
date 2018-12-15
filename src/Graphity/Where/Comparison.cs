@@ -1,6 +1,6 @@
 ﻿namespace Graphity.Where
 {
-    public enum Comparison
+    internal enum Comparison
     {
         Equal,
         NotEqual,
