@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 namespace AspNetWebApi.Data
 {
     public class AnimalContext : DbContext

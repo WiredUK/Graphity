@@ -1,4 +1,5 @@
-﻿namespace AspNetWebApi.Data
+﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
+namespace AspNetWebApi.Data
 {
     public class Animal
     {

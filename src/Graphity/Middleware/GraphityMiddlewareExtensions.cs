@@ -10,6 +10,7 @@ namespace Graphity.Middleware
         /// <param name="builder"></param>
         /// <param name="path">Optional parameter to specify the URL that is used for the graph endpoint</param>
         /// <returns></returns>
+        // ReSharper disable once UnusedMethodReturnValue.Global
         public static IApplicationBuilder UseGraphity(this IApplicationBuilder builder,
             string path = "/api/graph")
         {

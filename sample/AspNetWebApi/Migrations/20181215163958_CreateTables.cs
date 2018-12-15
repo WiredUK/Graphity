@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AspNetWebApi.Migrations
 {
+    // ReSharper disable once UnusedMember.Global
     public partial class CreateTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -12,7 +13,7 @@ namespace AspNetWebApi.Migrations
                 name: "Countries",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>()
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true)
                 },
@@ -25,12 +26,12 @@ namespace AspNetWebApi.Migrations
                 name: "Animals",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>()
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
-                    NumberOfLegs = table.Column<short>(nullable: false),
-                    AnimalType = table.Column<int>(nullable: false),
-                    LivesInId = table.Column<int>(nullable: false)
+                    NumberOfLegs = table.Column<short>(),
+                    AnimalType = table.Column<int>(),
+                    LivesInId = table.Column<int>()
                 },
                 constraints: table =>
                 {
@@ -47,10 +48,10 @@ namespace AspNetWebApi.Migrations
                 name: "CountryProperties",
                 columns: table => new
                 {
-                    CountryId = table.Column<int>(nullable: false),
-                    Population = table.Column<long>(nullable: false),
-                    TaxRate = table.Column<decimal>(nullable: false),
-                    HasMonarchy = table.Column<bool>(nullable: false),
+                    CountryId = table.Column<int>(),
+                    Population = table.Column<long>(),
+                    TaxRate = table.Column<decimal>(),
+                    HasMonarchy = table.Column<bool>(),
                     LastTimeWonWorldCup = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>

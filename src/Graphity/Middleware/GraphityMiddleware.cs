@@ -16,6 +16,7 @@ namespace Graphity.Middleware
         {
         }
 
+        // ReSharper disable once UnusedMember.Global
         public async Task InvokeAsync(HttpContext context,
             IDocumentExecuter documentExecuter,
             ISchema schema)

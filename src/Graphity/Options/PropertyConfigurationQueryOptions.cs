@@ -23,7 +23,6 @@ namespace Graphity.Options
 
         public string Name => _options.Name;
         public IReadOnlyCollection<IDbSetConfiguration> DbSetConfigurations => _options.DbSetConfigurations;
-        public IReadOnlyCollection<IPropertyConfiguration> PropertyConfigurations => _options.PropertyConfigurations;
 
         public IQueryOptions<TContext> QueryName(string name)
         {
@@ -65,17 +64,6 @@ namespace Graphity.Options
         public IPropertyConfigurationQueryOptions<TContext, TEntity, TProperty> Exclude()
         {
             _propertyConfiguration.Exclude = true;
-            return this;
-        }
-
-        public IPropertyConfigurationQueryOptions<TContext, TEntity, TProperty> FilterProperty(Expression<Func<IEnumerable<TProperty>, bool>> propertyFilter)
-        {
-            if (!typeof(TProperty).IsClass)
-            {
-                throw new GraphityException("Property filters can only be applied to navigation properties and not simple types like int, string etc.");
-            }
-
-            _propertyConfiguration.FilterExpression = propertyFilter;
             return this;
         }
     }

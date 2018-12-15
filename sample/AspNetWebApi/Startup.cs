@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using AspNetWebApi.Data;
+﻿using AspNetWebApi.Data;
 using Graphity;
 using Graphity.Middleware;
 using Microsoft.AspNetCore.Builder;
@@ -35,6 +34,7 @@ namespace AspNetWebApi
                 options.QueryName("AnimalsQuery");
 
                 options.ConfigureSet(ctx => ctx.Animals)
+                    .TypeName("FaunaType")
                     .FieldName("filteredAnimals")
                     .Filter(a => a.Id > 1)
                     .ConfigureProperty(a => a.Id).Exclude()

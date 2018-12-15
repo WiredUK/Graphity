@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+// ReSharper disable UnusedMember.Global
 namespace AspNetWebApi.Data
 {
     public class Country

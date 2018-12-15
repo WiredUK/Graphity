@@ -65,8 +65,5 @@ namespace Graphity.Options
 
             return new PropertyConfigurationQueryOptions<TContext, TEntity, TProperty>(this, _dbSetConfiguration, propertyConfiguration);
         }
-
-        public IReadOnlyCollection<IPropertyConfiguration> PropertyConfigurations =>
-            _dbSetConfiguration.PropertyConfigurations;
     }
 }

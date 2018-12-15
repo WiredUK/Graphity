@@ -18,6 +18,7 @@ namespace Graphity
         /// <typeparam name="TContext"></typeparam>
         /// <param name="services"></param>
         /// <returns></returns>
+        // ReSharper disable once UnusedMember.Global
         public static IServiceCollection AddGraphity<TContext>(this IServiceCollection services)
             where TContext : DbContext
         {
@@ -62,13 +63,13 @@ namespace Graphity
             {
                 var graphType = typeof(DynamicObjectGraphType<,>).MakeGenericType(typeof(TContext), field.Type);
 
-                Action<Type> typeRegistrar = type => services.AddSingleton(type);
 
                 services.AddSingleton(
                     graphType,
-                    Activator.CreateInstance(graphType, field, typeRegistrar));
+                    Activator.CreateInstance(graphType, field, (Action<Type>) TypeRegistrar));
             }
 
+            void TypeRegistrar(Type type) => services.AddSingleton(type);
 
             return services;
         }

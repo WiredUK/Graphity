@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +15,5 @@ namespace Graphity.Options
 
         IPropertyConfigurationQueryOptions<TContext, TEntity, TProperty> ConfigureProperty<TProperty>(
             Expression<Func<TEntity, TProperty>> propertyExpression);
-
-        IReadOnlyCollection<IPropertyConfiguration> PropertyConfigurations { get; }
     }
 }

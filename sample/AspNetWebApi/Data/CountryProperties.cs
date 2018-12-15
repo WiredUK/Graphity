@@ -1,5 +1,7 @@
 ﻿using System;
 
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
 namespace AspNetWebApi.Data
 {
     public class CountryProperties
