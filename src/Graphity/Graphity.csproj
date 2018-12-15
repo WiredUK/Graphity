@@ -2,16 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.9.4</Version>
+    <Version>0.9.5</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>A .NET Core library that integrates GraphQL and Entity Framework Core with minimal effort</Description>
     <PackageProjectUrl>https://github.com/WiredUK/Graphity</PackageProjectUrl>
     <PackageIconUrl>http://david.glass/w-logo.png</PackageIconUrl>
     <PackageTags>GraphQL Entity Framework Core</PackageTags>
-    <PackageReleaseNotes>Added ability to exclude columns from the graph</PackageReleaseNotes>
+    <PackageReleaseNotes>Added more supported data types (short, long, DateTime, TimeSpan, nullables)</PackageReleaseNotes>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <AssemblyVersion>0.9.4.0</AssemblyVersion>
-    <FileVersion>0.9.4.0</FileVersion>
+    <AssemblyVersion>0.9.5.0</AssemblyVersion>
+    <FileVersion>0.9.5.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
