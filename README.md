@@ -84,9 +84,11 @@ Here are some things I'd like to get working:
   * Name individual properties. (though this might make the dynamic expression building awkward which makes this low priority)
   * ~~Exclude properties from the graph.~~
 * *Add unit testing*: Yeah, this should have been done already...
+* *Add ordering*: Add argument to allow custom ordering.
+* *Skip & take*: To support pagination of queries.
 * *Authentication & authorisation*: Makes sense to protect your data right? Not sure how this would work but my current thought is to have some sort of pluggable module to allow a bunch of different mechanisms.
 * *Mutations*: Currently Graphity is read-only and a big part of GraphQL is the ability to send changes to your data store. However, I'd like to nail the auth component before tackling this one as making changes might be far more dangerous than reading data.
-* *Custom mappings*: Allow a custom mapping to be injected that transforms the output into a different format. This would be applied after the data is retrieved from EF so could be very generic. As this would affect the graph, this needs some serious thought putting in and may not really be needed... Hmm, one to ponder.
+* *Custom mappings*: Allow a custom mapping to be injected that transforms the output into a different format. This would be applied after the data is retrieved from EF so could be very generic. As this would affect the graph, this needs some serious thought putting in and may not really be needed... Hmm, one to ponder. 
 
 ## Contributing
 
