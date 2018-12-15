@@ -1,4 +1,5 @@
 ﻿using AspNetWebApi.Data;
+using GraphiQl;
 using Graphity;
 using Graphity.Middleware;
 using Microsoft.AspNetCore.Builder;
@@ -62,6 +63,8 @@ namespace AspNetWebApi
             }
 
             app.UseGraphity();
+
+            app.UseGraphiQl("/graphiql", "/api/graph");
 
             app.UseHttpsRedirection();
             app.UseMvcWithDefaultRoute();
