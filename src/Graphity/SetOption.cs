@@ -2,7 +2,6 @@
 {
     public enum SetOption
     {
-        Exclude,
         IncludeAsFieldOnly,
         IncludeAsChildOnly,
         IncludeAsFieldAndChild
