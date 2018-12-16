@@ -20,9 +20,9 @@ namespace Graphity.Options
                 return dbSetProperties.Select(pi => new DbSetConfiguration
                 {
                     SetOption = SetOption.IncludeAsFieldAndChild,
-                    Type = pi.PropertyType,
+                    Type = pi.PropertyType.GetGenericArguments()[0],
                     TypeName = pi.Name,
-                    FieldName = pi.PropertyType.Name
+                    FieldName = pi.Name
                 });
             }
 
@@ -44,9 +44,9 @@ namespace Graphity.Options
                 return dbSetProperties.Select(pi => new DbSetConfiguration
                 {
                     SetOption = SetOption.IncludeAsFieldAndChild,
-                    Type = pi.PropertyType,
+                    Type = pi.PropertyType.GetGenericArguments()[0],
                     TypeName = pi.Name,
-                    FieldName = pi.PropertyType.Name
+                    FieldName = pi.Name
                 });
             }
 

@@ -101,6 +101,10 @@ namespace Graphity
                     Field(graphType, property.Name);
                     typeRegistrar(enumGraphType);
                 }
+                else if (property.PropertyType == typeof(byte[]))
+                {
+                    //Unsupported type, just ignore
+                }
                 else if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
                 {
                     var type = property.PropertyType.GetGenericArguments()[0];
