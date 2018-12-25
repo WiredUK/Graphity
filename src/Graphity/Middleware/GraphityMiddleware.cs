@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using GraphQL;
@@ -21,12 +23,13 @@ namespace Graphity.Middleware
             IDocumentExecuter documentExecuter,
             ISchema schema)
         {
-            var query = await GetQuery(context);
+            var query = GetQuery(context);
             var result = await documentExecuter.ExecuteAsync(options =>
             {
                 options.OperationName = query.OperationName;
                 options.Schema = schema;
                 options.Query = query.Query;
+                options.ExposeExceptions = true;
                 options.Inputs = query.Variables == null ? null : new Inputs(query.Variables);
             }).ConfigureAwait(false);
 
@@ -35,27 +38,19 @@ namespace Graphity.Middleware
                 context.Response.StatusCode = 400;
             }
 
+            context.Response.ContentType = "application/json";
             await context.Response.WriteAsync(JsonConvert.SerializeObject(result));
         }
 
-        private static async Task<GraphQLQuery> GetQuery(HttpContext context)
+        private static GraphQLQuery GetQuery(HttpContext context)
         {
-            var body = context.Request.Body;
+            var serializer = new JsonSerializer();
 
-            var request = context.Request;
-
-            var buffer = new byte[Convert.ToInt32(request.ContentLength)];
-            await request.Body.ReadAsync(buffer, 0, buffer.Length);
-
-            var bodyAsText = Encoding.UTF8.GetString(buffer);
-            request.Body = body;
-
-            if (bodyAsText == "")
+            using (var sr = new StreamReader(context.Request.Body))
+            using (var jsonTextReader = new JsonTextReader(sr))
             {
-                bodyAsText = "{}";
+                return serializer.Deserialize<GraphQLQuery>(jsonTextReader);
             }
-
-            return JsonConvert.DeserializeObject<GraphQLQuery>(bodyAsText);
         }
     }
 }
