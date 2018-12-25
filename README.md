@@ -83,7 +83,6 @@ Here are some things I'd like to get working:
   * ~~Name the types.~~
   * Name individual properties. (though this might make the dynamic expression building awkward which makes this low priority)
   * ~~Exclude properties from the graph.~~
-* *Add unit testing*: Yeah, this should have been done already...
 * *Add ordering*: Add argument to allow custom ordering.
 * *Skip & take*: To support pagination of queries.
 * *Authentication & authorisation*: Makes sense to protect your data right? Not sure how this would work but my current thought is to have some sort of pluggable module to allow a bunch of different mechanisms.
