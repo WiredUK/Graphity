@@ -45,7 +45,6 @@ namespace Graphity.Options
                 {
                     SetOption = SetOption.IncludeAsFieldAndChild,
                     Type = pi.PropertyType.GetGenericArguments()[0],
-                    TypeName = pi.Name,
                     FieldName = pi.Name
                 });
             }
@@ -56,6 +55,11 @@ namespace Graphity.Options
         internal static bool CanBeAChild<TContext>(this IQueryOptions<TContext> options, Type type)
             where TContext : DbContext
         {
+            if (!options.DbSetConfigurations.Any())
+            {
+                return true;
+            }
+
             return options.DbSetConfigurations
                 .Any(dsc => dsc.Type == type &&
                             (dsc.SetOption == SetOption.IncludeAsChildOnly ||
