@@ -66,7 +66,14 @@ namespace Graphity.Where
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
             var propertyExp = Expression.Property(parameterExp, propertyName);
-            var method = typeof(string).GetMethod("Contains", new[] {typeof(string)});
+
+            if (propertyExp.Type != typeof(string))
+            {
+                throw new GraphityException(
+                    $"The 'Contains' comparison cannot be made against a property of type {propertyExp.Type.Name}, did you mean to use 'In'?");
+            }
+
+            var method = typeof(string).GetMethod("Contains", new[] { typeof(string) });
             var someValue = Expression.Constant(propertyValue, typeof(string));
             Debug.Assert(method != null, nameof(method) + " != null");
             var methodExpression = Expression.Call(propertyExp, method, someValue);
@@ -78,10 +85,28 @@ namespace Graphity.Where
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
             var propertyExp = Expression.Property(parameterExp, propertyName);
-            var method = propertyExp.Type.GetMethod("Equals", new[] {propertyExp.Type});
-            var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
-            Debug.Assert(method != null, nameof(method) + " != null");
-            var methodExpression = Expression.GreaterThan(propertyExp, someValue);
+
+            Expression methodExpression;
+
+            if (propertyExp.Type == typeof(bool))
+            {
+                throw new GraphityException(
+                    $"The 'GreaterThan' comparison cannot be made against a property of type bool");
+            }
+
+            if (propertyExp.Type == typeof(string))
+            {       
+                //For strings, we need to use string.Compare(value) > 0
+                var method = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
+                var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
+                var compareExpression = Expression.Call(null, method, propertyExp, someValue);
+                methodExpression = Expression.GreaterThan(compareExpression, Expression.Constant(0));
+            }
+            else
+            {
+                var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
+                methodExpression = Expression.GreaterThan(propertyExp, someValue);
+            }
 
             return Expression.Lambda<Func<T, bool>>(methodExpression, parameterExp);
         }
@@ -90,10 +115,27 @@ namespace Graphity.Where
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
             var propertyExp = Expression.Property(parameterExp, propertyName);
-            var method = propertyExp.Type.GetMethod("Equals", new[] {propertyExp.Type});
-            var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
-            Debug.Assert(method != null, nameof(method) + " != null");
-            var methodExpression = Expression.GreaterThanOrEqual(propertyExp, someValue);
+
+            Expression methodExpression;
+            if (propertyExp.Type == typeof(bool))
+            {
+                throw new GraphityException(
+                    $"The 'GreaterThanOrEqual' comparison cannot be made against a property of type bool");
+            }
+
+            if (propertyExp.Type == typeof(string))
+            {
+                //For strings, we need to use string.Compare(value) > 0
+                var method = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
+                var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
+                var compareExpression = Expression.Call(null, method, propertyExp, someValue);
+                methodExpression = Expression.GreaterThanOrEqual(compareExpression, Expression.Constant(0));
+            }
+            else
+            {
+                var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
+                methodExpression = Expression.GreaterThanOrEqual(propertyExp, someValue);
+            }
 
             return Expression.Lambda<Func<T, bool>>(methodExpression, parameterExp);
         }
@@ -102,10 +144,28 @@ namespace Graphity.Where
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
             var propertyExp = Expression.Property(parameterExp, propertyName);
-            var method = propertyExp.Type.GetMethod("Equals", new[] {propertyExp.Type});
-            var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
-            Debug.Assert(method != null, nameof(method) + " != null");
-            var methodExpression = Expression.LessThan(propertyExp, someValue);
+
+            Expression methodExpression;
+
+            if (propertyExp.Type == typeof(bool))
+            {
+                throw new GraphityException(
+                    $"The 'LessThan' comparison cannot be made against a property of type bool");
+            }
+
+            if (propertyExp.Type == typeof(string))
+            {
+                //For strings, we need to use string.Compare(value) > 0
+                var method = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
+                var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
+                var compareExpression = Expression.Call(null, method, propertyExp, someValue);
+                methodExpression = Expression.LessThan(compareExpression, Expression.Constant(0));
+            }
+            else
+            {
+                var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
+                methodExpression = Expression.LessThan(propertyExp, someValue);
+            }
 
             return Expression.Lambda<Func<T, bool>>(methodExpression, parameterExp);
         }
@@ -114,10 +174,28 @@ namespace Graphity.Where
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
             var propertyExp = Expression.Property(parameterExp, propertyName);
-            var method = propertyExp.Type.GetMethod("Equals", new[] {propertyExp.Type});
-            var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
-            Debug.Assert(method != null, nameof(method) + " != null");
-            var methodExpression = Expression.LessThanOrEqual(propertyExp, someValue);
+
+            Expression methodExpression;
+
+            if (propertyExp.Type == typeof(bool))
+            {
+                throw new GraphityException(
+                    $"The 'LessThanOrEqual' comparison cannot be made against a property of type bool");
+            }
+
+            if (propertyExp.Type == typeof(string))
+            {
+                //For strings, we need to use string.Compare(value) > 0
+                var method = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
+                var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
+                var compareExpression = Expression.Call(null, method, propertyExp, someValue);
+                methodExpression = Expression.LessThanOrEqual(compareExpression, Expression.Constant(0));
+            }
+            else
+            {
+                var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
+                methodExpression = Expression.LessThanOrEqual(propertyExp, someValue);
+            }
 
             return Expression.Lambda<Func<T, bool>>(methodExpression, parameterExp);
         }
@@ -126,6 +204,13 @@ namespace Graphity.Where
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
             var propertyExp = Expression.Property(parameterExp, propertyName);
+
+            if (propertyExp.Type != typeof(string))
+            {
+                throw new GraphityException(
+                    $"The 'StartsWith' comparison cannot be made against a property of type {propertyExp.Type.Name}");
+            }
+
             var method = typeof(string).GetMethod("StartsWith", new[] {typeof(string)});
             var someValue = Expression.Constant(propertyValue, typeof(string));
             Debug.Assert(method != null, nameof(method) + " != null");
@@ -138,6 +223,13 @@ namespace Graphity.Where
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
             var propertyExp = Expression.Property(parameterExp, propertyName);
+
+            if (propertyExp.Type != typeof(string))
+            {
+                throw new GraphityException(
+                    $"The 'EndsWith' comparison cannot be made against a property of type {propertyExp.Type.Name}");
+            }
+
             var method = typeof(string).GetMethod("EndsWith", new[] {typeof(string)});
             var someValue = Expression.Constant(propertyValue, typeof(string));
             Debug.Assert(method != null, nameof(method) + " != null");
