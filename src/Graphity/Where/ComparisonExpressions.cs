@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -44,7 +43,7 @@ namespace Graphity.Where
             var propertyExp = Expression.Property(parameterExp, propertyName);
             var method = propertyExp.Type.GetMethod("Equals", new[] {propertyExp.Type});
             var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
-            Debug.Assert(method != null, nameof(method) + " != null");
+            // ReSharper disable once AssignNullToNotNullAttribute
             var methodExpression = Expression.Call(propertyExp, method, someValue);
 
             return Expression.Lambda<Func<T, bool>>(methodExpression, parameterExp);
@@ -56,7 +55,7 @@ namespace Graphity.Where
             var propertyExp = Expression.Property(parameterExp, propertyName);
             var method = propertyExp.Type.GetMethod("Equals", new[] {propertyExp.Type});
             var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
-            Debug.Assert(method != null, nameof(method) + " != null");
+            // ReSharper disable once AssignNullToNotNullAttribute
             var methodExpression = Expression.Call(propertyExp, method, someValue);
 
             return Expression.Lambda<Func<T, bool>>(Expression.Not(methodExpression), parameterExp);
@@ -75,7 +74,7 @@ namespace Graphity.Where
 
             var method = typeof(string).GetMethod("Contains", new[] { typeof(string) });
             var someValue = Expression.Constant(propertyValue, typeof(string));
-            Debug.Assert(method != null, nameof(method) + " != null");
+            // ReSharper disable once AssignNullToNotNullAttribute
             var methodExpression = Expression.Call(propertyExp, method, someValue);
 
             return Expression.Lambda<Func<T, bool>>(methodExpression, parameterExp);
@@ -99,6 +98,7 @@ namespace Graphity.Where
                 //For strings, we need to use string.Compare(value) > 0
                 var method = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
                 var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
+                // ReSharper disable once AssignNullToNotNullAttribute
                 var compareExpression = Expression.Call(null, method, propertyExp, someValue);
                 methodExpression = Expression.GreaterThan(compareExpression, Expression.Constant(0));
             }
@@ -128,6 +128,7 @@ namespace Graphity.Where
                 //For strings, we need to use string.Compare(value) > 0
                 var method = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
                 var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
+                // ReSharper disable once AssignNullToNotNullAttribute
                 var compareExpression = Expression.Call(null, method, propertyExp, someValue);
                 methodExpression = Expression.GreaterThanOrEqual(compareExpression, Expression.Constant(0));
             }
@@ -158,6 +159,7 @@ namespace Graphity.Where
                 //For strings, we need to use string.Compare(value) > 0
                 var method = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
                 var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
+                // ReSharper disable once AssignNullToNotNullAttribute
                 var compareExpression = Expression.Call(null, method, propertyExp, someValue);
                 methodExpression = Expression.LessThan(compareExpression, Expression.Constant(0));
             }
@@ -188,6 +190,7 @@ namespace Graphity.Where
                 //For strings, we need to use string.Compare(value) > 0
                 var method = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
                 var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
+                // ReSharper disable once AssignNullToNotNullAttribute
                 var compareExpression = Expression.Call(null, method, propertyExp, someValue);
                 methodExpression = Expression.LessThanOrEqual(compareExpression, Expression.Constant(0));
             }
@@ -213,7 +216,7 @@ namespace Graphity.Where
 
             var method = typeof(string).GetMethod("StartsWith", new[] {typeof(string)});
             var someValue = Expression.Constant(propertyValue, typeof(string));
-            Debug.Assert(method != null, nameof(method) + " != null");
+            // ReSharper disable once AssignNullToNotNullAttribute
             var methodExpression = Expression.Call(propertyExp, method, someValue);
 
             return Expression.Lambda<Func<T, bool>>(methodExpression, parameterExp);
@@ -232,7 +235,7 @@ namespace Graphity.Where
 
             var method = typeof(string).GetMethod("EndsWith", new[] {typeof(string)});
             var someValue = Expression.Constant(propertyValue, typeof(string));
-            Debug.Assert(method != null, nameof(method) + " != null");
+            // ReSharper disable once AssignNullToNotNullAttribute
             var methodExpression = Expression.Call(propertyExp, method, someValue);
 
             return Expression.Lambda<Func<T, bool>>(methodExpression, parameterExp);
