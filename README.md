@@ -104,7 +104,7 @@ How about we only want animals that start with the letter 'S':
 }
 ```
 
-We also support some basic dotted dereferencing og non-enumerable child properties. This allows us to query all animals that don't live in France:
+We also support some basic dotted dereferencing of non-enumerable child properties. This allows us to query all animals that don't live in France:
 
 ```
 {
