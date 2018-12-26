@@ -80,7 +80,7 @@ Another aim of this project is to construct the Entity Framework queries to be a
 
 Starting off with a basic query, get all animals and the country where they live. Note that it is possible to rename the fields:
 
-```
+```graphql
 {
   filteredAnimals {
     name
@@ -93,7 +93,7 @@ Starting off with a basic query, get all animals and the country where they live
 
 How about we only want animals that start with the letter 'S':
 
-```
+```graphql
 {
   filteredAnimals(where: [{path: "name", comparison: startsWith, value: "S"}]) {
     name
@@ -106,7 +106,7 @@ How about we only want animals that start with the letter 'S':
 
 We also support some basic dotted dereferencing of non-enumerable child properties. This allows us to query all animals that don't live in France:
 
-```
+```graphql
 {
   filteredAnimals(where: [{path: "livesIn.name", comparison: notEqual, value: "France"}]) {
     name
@@ -119,7 +119,7 @@ We also support some basic dotted dereferencing of non-enumerable child properti
 
 Perhaps we only want the first 3 animals:
 
-```
+```graphql
 {
   filteredAnimals(take: 3) {
     name
@@ -132,7 +132,7 @@ Perhaps we only want the first 3 animals:
 
 Or the second batch of 3 animals:
 
-```
+```graphql
 {
   filteredAnimals(skip: 3, take: 3) {
     name
@@ -145,7 +145,7 @@ Or the second batch of 3 animals:
 
 But a `skip`/`take` is rarely a good idea without specifying an order, and we can order by the country the animal live:
 
-```
+```graphql
 {
   filteredAnimals(skip: 3, take: 3, orderBy:{path:"livesIn.name"}) {
     name
