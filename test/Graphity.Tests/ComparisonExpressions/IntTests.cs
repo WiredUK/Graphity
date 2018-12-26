@@ -18,7 +18,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void Int_equal_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.Equal,
                 "IntProperty",
                 "2");
@@ -34,7 +34,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void Int_NotEqual_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.NotEqual,
                 "IntProperty",
                 "2");
@@ -51,7 +51,7 @@ namespace Graphity.Tests.ComparisonExpressions
         public void Int_Contains_throws_exception()
         {
             Assert.Throws<GraphityException>(() => 
-                Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+                Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                     Comparison.Contains, 
                     "IntProperty", 
                     "1"));
@@ -60,7 +60,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void Int_GreaterThan_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.GreaterThan,
                 "IntProperty",
                 "2");
@@ -76,7 +76,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void Int_GreaterThanOrEqual_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.GreaterThanOrEqual,
                 "IntProperty",
                 "2");
@@ -92,7 +92,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void Int_LessThan_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.LessThan,
                 "IntProperty",
                 "3");
@@ -109,7 +109,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void Int_LessThanOrEqual_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.LessThanOrEqual,
                 "IntProperty",
                 "3");
@@ -127,7 +127,7 @@ namespace Graphity.Tests.ComparisonExpressions
         public void Int_StartsWith_throws_exception()
         {
             Assert.Throws<GraphityException>(() => 
-                Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+                Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                     Comparison.StartsWith, 
                     "IntProperty", 
                     "1"));
@@ -137,7 +137,7 @@ namespace Graphity.Tests.ComparisonExpressions
         public void Int_EndsWith_throws_exception()
         {
             Assert.Throws<GraphityException>(() =>
-                Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+                Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                     Comparison.EndsWith,
                     "IntProperty",
                     "1"));
@@ -146,7 +146,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void Int_In_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.In,
                 "IntProperty",
                 "2,3");

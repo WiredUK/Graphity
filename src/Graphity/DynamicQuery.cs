@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Graphity.Expressions;
 using Graphity.Options;
 using Graphity.Ordering;
 using Graphity.Where;
@@ -245,7 +246,7 @@ namespace Graphity
         private IQueryable<TEntity> ApplyCustomOrderBy<TEntity>(IQueryable<TEntity> source, OrderByExpression orderByExpression)
         {
             var parameterExp = Expression.Parameter(typeof(TEntity), "entity");
-            var propertyExp = Expression.Property(parameterExp, orderByExpression.Path);
+            var propertyExp = parameterExp.GetPropertyExpression(orderByExpression.Path);
 
             var methodName = orderByExpression.Direction == OrderByDirection.Ascending
                 ? "OrderBy"

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using Graphity.Where;
 
-namespace Graphity.Where
+namespace Graphity.Expressions
 {
     internal static class ComparisonExpressions
     {
@@ -40,7 +41,7 @@ namespace Graphity.Where
         private static Expression<Func<T, bool>> Equal<T>(string propertyName, string propertyValue)
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
-            var propertyExp = Expression.Property(parameterExp, propertyName);
+            var propertyExp = parameterExp.GetPropertyExpression(propertyName);
             var method = propertyExp.Type.GetMethod("Equals", new[] {propertyExp.Type});
             var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
             // ReSharper disable once AssignNullToNotNullAttribute
@@ -52,7 +53,7 @@ namespace Graphity.Where
         private static Expression<Func<T, bool>> NotEqual<T>(string propertyName, string propertyValue)
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
-            var propertyExp = Expression.Property(parameterExp, propertyName);
+            var propertyExp = parameterExp.GetPropertyExpression(propertyName);
             var method = propertyExp.Type.GetMethod("Equals", new[] {propertyExp.Type});
             var someValue = Expression.Constant(GetValueByType(propertyValue, propertyExp.Type), propertyExp.Type);
             // ReSharper disable once AssignNullToNotNullAttribute
@@ -64,7 +65,7 @@ namespace Graphity.Where
         private static Expression<Func<T, bool>> Contains<T>(string propertyName, string propertyValue)
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
-            var propertyExp = Expression.Property(parameterExp, propertyName);
+            var propertyExp = parameterExp.GetPropertyExpression(propertyName);
 
             if (propertyExp.Type != typeof(string))
             {
@@ -83,7 +84,7 @@ namespace Graphity.Where
         private static Expression<Func<T, bool>> GreaterThan<T>(string propertyName, string propertyValue)
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
-            var propertyExp = Expression.Property(parameterExp, propertyName);
+            var propertyExp = parameterExp.GetPropertyExpression(propertyName);
 
             Expression methodExpression;
 
@@ -114,7 +115,7 @@ namespace Graphity.Where
         private static Expression<Func<T, bool>> GreaterThanOrEqual<T>(string propertyName, string propertyValue)
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
-            var propertyExp = Expression.Property(parameterExp, propertyName);
+            var propertyExp = parameterExp.GetPropertyExpression(propertyName);
 
             Expression methodExpression;
             if (propertyExp.Type == typeof(bool))
@@ -144,7 +145,7 @@ namespace Graphity.Where
         private static Expression<Func<T, bool>> LessThan<T>(string propertyName, string propertyValue)
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
-            var propertyExp = Expression.Property(parameterExp, propertyName);
+            var propertyExp = parameterExp.GetPropertyExpression(propertyName);
 
             Expression methodExpression;
 
@@ -175,7 +176,7 @@ namespace Graphity.Where
         private static Expression<Func<T, bool>> LessThanOrEqual<T>(string propertyName, string propertyValue)
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
-            var propertyExp = Expression.Property(parameterExp, propertyName);
+            var propertyExp = parameterExp.GetPropertyExpression(propertyName);
 
             Expression methodExpression;
 
@@ -206,7 +207,7 @@ namespace Graphity.Where
         private static Expression<Func<T, bool>> StartsWith<T>(string propertyName, string propertyValue)
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
-            var propertyExp = Expression.Property(parameterExp, propertyName);
+            var propertyExp = parameterExp.GetPropertyExpression(propertyName);
 
             if (propertyExp.Type != typeof(string))
             {
@@ -225,7 +226,7 @@ namespace Graphity.Where
         private static Expression<Func<T, bool>> EndsWith<T>(string propertyName, string propertyValue)
         {
             var parameterExp = Expression.Parameter(typeof(T), "entity");
-            var propertyExp = Expression.Property(parameterExp, propertyName);
+            var propertyExp = parameterExp.GetPropertyExpression(propertyName);
 
             if (propertyExp.Type != typeof(string))
             {
@@ -257,7 +258,7 @@ namespace Graphity.Where
 
             var arrayExp = Expression.Constant(values);
             var parameterExp = Expression.Parameter(typeof(T), "entity");
-            var propertyExp = Expression.Property(parameterExp, propertyName);
+            var propertyExp = parameterExp.GetPropertyExpression(propertyName);
             var method = type.GetMethod("Equals", new[] {type});
 
             var innerParameterExp = Expression.Parameter(type, "innerValue");

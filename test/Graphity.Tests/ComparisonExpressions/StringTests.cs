@@ -17,7 +17,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void String_equal_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.Equal,
                 "StringProperty",
                 "string2");
@@ -33,7 +33,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void String_NotEqual_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.NotEqual,
                 "StringProperty",
                 "string2");
@@ -49,7 +49,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void String_Contains_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.Contains,
                 "StringProperty",
                 "ring2");
@@ -65,7 +65,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void String_GreaterThan_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.GreaterThan,
                 "StringProperty",
                 "string2");
@@ -81,7 +81,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void String_GreaterThanOrEqual_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.GreaterThanOrEqual,
                 "StringProperty",
                 "string2");
@@ -97,7 +97,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void String_LessThan_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.LessThan,
                 "StringProperty",
                 "string3");
@@ -114,7 +114,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void String_LessThanOrEqual_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.LessThanOrEqual,
                 "StringProperty",
                 "string3");
@@ -131,7 +131,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void String_StartsWith_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.StartsWith,
                 "StringProperty",
                 "str");
@@ -146,7 +146,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void String_EndsWith_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.EndsWith,
                 "StringProperty",
                 "ring2");
@@ -164,7 +164,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void String_In_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.In,
                 "StringProperty",
                 "string2,string3");

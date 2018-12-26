@@ -17,7 +17,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void Bool_equal_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.Equal,
                 "BoolProperty",
                 "true");
@@ -32,7 +32,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void Bool_NotEqual_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.NotEqual,
                 "BoolProperty",
                 "true");
@@ -49,7 +49,7 @@ namespace Graphity.Tests.ComparisonExpressions
         public void Bool_Contains_throws_exception()
         {
             Assert.Throws<GraphityException>(() => 
-                Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+                Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                     Comparison.Contains, 
                     "BoolProperty",
                     "true"));
@@ -59,7 +59,7 @@ namespace Graphity.Tests.ComparisonExpressions
         public void Bool_GreaterThan_returns_valid_response()
         {
             Assert.Throws<GraphityException>(() =>
-                Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+                Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                     Comparison.GreaterThan,
                     "BoolProperty",
                     "true"));
@@ -69,7 +69,7 @@ namespace Graphity.Tests.ComparisonExpressions
         public void Bool_GreaterThanOrEqual_returns_valid_response()
         {
             Assert.Throws<GraphityException>(() =>
-                Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+                Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                     Comparison.GreaterThanOrEqual,
                     "BoolProperty",
                     "true"));
@@ -79,7 +79,7 @@ namespace Graphity.Tests.ComparisonExpressions
         public void Bool_LessThan_returns_valid_response()
         {
             Assert.Throws<GraphityException>(() =>
-                Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+                Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                     Comparison.LessThan,
                     "BoolProperty",
                     "true"));
@@ -89,7 +89,7 @@ namespace Graphity.Tests.ComparisonExpressions
         public void Bool_LessThanOrEqual_returns_valid_response()
         {
             Assert.Throws<GraphityException>(() =>
-                Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+                Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                     Comparison.LessThanOrEqual,
                     "BoolProperty",
                     "true"));
@@ -99,7 +99,7 @@ namespace Graphity.Tests.ComparisonExpressions
         public void Bool_StartsWith_throws_exception()
         {
             Assert.Throws<GraphityException>(() => 
-                Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+                Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                     Comparison.StartsWith, 
                     "BoolProperty",
                     "true"));
@@ -109,7 +109,7 @@ namespace Graphity.Tests.ComparisonExpressions
         public void Bool_EndsWith_throws_exception()
         {
             Assert.Throws<GraphityException>(() =>
-                Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+                Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                     Comparison.EndsWith,
                     "BoolProperty",
                     "true"));
@@ -118,7 +118,7 @@ namespace Graphity.Tests.ComparisonExpressions
         [Fact]
         public void Bool_In_returns_valid_response()
         {
-            var expression = Where.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
+            var expression = Expressions.ComparisonExpressions.GetComparisonExpression<ComparisonExpressionsFixture.Parent>(
                 Comparison.In,
                 "BoolProperty",
                 "true,false");
