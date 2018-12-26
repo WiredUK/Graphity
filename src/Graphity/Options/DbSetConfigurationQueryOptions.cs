@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Graphity.Ordering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Graphity.Options
@@ -27,6 +28,15 @@ namespace Graphity.Options
             Expression<Func<TEntity, bool>> defaultFilter)
         {
             _dbSetConfiguration.FilterExpression = defaultFilter;
+            return this;
+        }
+
+        public IDbSetConfigurationQueryOptions<TContext, TEntity> DefaultOrderBy(
+            Expression<Func<TEntity, object>> defaultOrderBy,
+            OrderByDirection orderByDirection = OrderByDirection.Ascending)
+        {
+            _dbSetConfiguration.DefaultOrderByExpression = defaultOrderBy;
+            _dbSetConfiguration.OrderByDirection = orderByDirection;
             return this;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Graphity.Options;
+using Graphity.Ordering;
 using Graphity.Where;
 using GraphQL;
 using GraphQL.Types;
@@ -58,6 +59,12 @@ namespace Graphity
             services.AddSingleton<ComparisonType>();
             GraphTypeTypeRegistry.Register<Comparison, ComparisonType>();
             GraphTypeTypeRegistry.Register<WhereExpression, WhereExpressionType>();
+
+            //Ordering
+            services.AddSingleton<OrderByExpressionType>();
+            services.AddSingleton<OrderByDirectionType>();
+            GraphTypeTypeRegistry.Register<OrderByDirection, OrderByDirectionType>();
+            GraphTypeTypeRegistry.Register<OrderByExpression, OrderByExpressionType>();
 
             foreach (var field in queryOptions.GetAllFields())
             {

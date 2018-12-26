@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Graphity.Ordering;
 
 namespace Graphity.Options
 {
@@ -11,6 +12,8 @@ namespace Graphity.Options
         string FieldName { get; }
         SetOption SetOption { get; }
         LambdaExpression FilterExpression { get; }
+        LambdaExpression DefaultOrderByExpression { get; }
+        OrderByDirection OrderByDirection { get; }
         IReadOnlyCollection<IPropertyConfiguration> PropertyConfigurations { get; }
     }
 }

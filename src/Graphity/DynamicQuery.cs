@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Graphity.Options;
+using Graphity.Ordering;
 using Graphity.Where;
 using GraphQL.Language.AST;
 using GraphQL.Types;
@@ -95,6 +96,18 @@ namespace Graphity
 
                     query = query.Where(expression);
                 }
+            }
+
+            if (resolveContext.Arguments.ContainsKey("orderBy"))
+            {
+                var orderByExpression = resolveContext.GetArgument<OrderByExpression>("orderBy");
+                query = ApplyCustomOrderBy(query, orderByExpression);
+            }
+            else if (dbSetConfiguration.DefaultOrderByExpression != null)
+            {
+                query = dbSetConfiguration.OrderByDirection == OrderByDirection.Ascending
+                    ? query.OrderBy((Expression<Func<TEntity, object>>)dbSetConfiguration.DefaultOrderByExpression) 
+                    : query.OrderByDescending((Expression<Func<TEntity, object>>)dbSetConfiguration.DefaultOrderByExpression);
             }
 
             if (resolveContext.Arguments.ContainsKey("skip"))
@@ -213,6 +226,37 @@ namespace Graphity
                 Description = $"The number of records to return, if omitted the default is {defaultTake}",
                 DefaultValue = defaultTake
             };
+
+            yield return new QueryArgument<IntGraphType>
+            {
+                Name = "take",
+                Description = $"The number of records to return, if omitted the default is {defaultTake}",
+                DefaultValue = defaultTake
+            };
+
+            yield return new QueryArgument<OrderByExpressionType>
+            {
+                Name = "orderBy",
+                Description = "Specify the order in format ```{path, direction}```."
+            };
         }
+
+        private IQueryable<TEntity> ApplyCustomOrderBy<TEntity>(IQueryable<TEntity> source, OrderByExpression orderByExpression)
+        {
+            var parameterExp = Expression.Parameter(typeof(TEntity), "entity");
+            var propertyExp = Expression.Property(parameterExp, orderByExpression.Path);
+
+            var methodName = orderByExpression.Direction == OrderByDirection.Ascending
+                ? "OrderBy"
+                : "OrderByDescending";
+
+            var orderByMethodGeneric = typeof(Queryable).GetMethods()
+                .Single(mi => mi.Name == methodName && mi.GetParameters().Length == 2);
+
+            var orderByMethod = orderByMethodGeneric.MakeGenericMethod(typeof(TEntity), propertyExp.Type);
+
+            return (IQueryable<TEntity>) orderByMethod.Invoke(null, new object[] { source, Expression.Lambda(propertyExp, parameterExp)});
+        }
+
     }
 }

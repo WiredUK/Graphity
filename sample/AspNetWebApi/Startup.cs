@@ -2,6 +2,7 @@
 using GraphiQl;
 using Graphity;
 using Graphity.Middleware;
+using Graphity.Ordering;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.Sqlite;
@@ -39,6 +40,7 @@ namespace AspNetWebApi
                     .TypeName("FaunaType") //Name the type
                     .FieldName("filteredAnimals") //Name the field used for querying
                     .Filter(a => a.Id > 1) //Add a filter to exclude anything with an ID less than 2
+                    .DefaultOrderBy(a => a.Name, OrderByDirection.Descending) //Add a default order to sort by name
                     .ConfigureProperty(a => a.Id).Exclude() //Remove Id property from the graph
                     .ConfigureProperty(a => a.LivesInId).Exclude(); //Remove LivesInId property from the graph
 
