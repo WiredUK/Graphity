@@ -26,12 +26,6 @@ namespace Graphity
 
             Name = QueryOptions.Name;
 
-            var whereArgument = new QueryArgument<ListGraphType<WhereExpressionType>>
-            {
-                Name = "where",
-                Description = "Filter to apply in format ```{path, comparison, value}```."
-            };
-
             foreach (var dbSetProperty in QueryOptions.GetFields())
             {
                 var graphType = typeof(DynamicObjectGraphType<,>).MakeGenericType(typeof(TContext), dbSetProperty.Type);
@@ -50,7 +44,7 @@ namespace Graphity
                     {
                         dbSetProperty.FieldName,
                         $"{dbSetProperty.FieldName} of type {dbSetProperty.TypeName}",
-                        new QueryArguments(whereArgument),
+                        new QueryArguments(GetDefaultArguments(QueryOptions.DefaultTake)),
                         (Func<ResolveFieldContext<object>, object>) (resolveContext =>
                             GetDataFromContext(dbSetProperty.Type, resolveContext, dbSetProperty)),
                         null
@@ -102,6 +96,15 @@ namespace Graphity
                     query = query.Where(expression);
                 }
             }
+
+            if (resolveContext.Arguments.ContainsKey("skip"))
+            {
+                var skip = resolveContext.GetArgument<int>("skip");
+                query = query.Skip(skip);
+            }
+
+            var take = resolveContext.GetArgument<int>("take");
+            query = query.Take(take);
 
             var projectionExpression = (Expression<Func<TEntity, TEntity>>)GetProjectionExpression(typeof(TEntity), resolveContext.SubFields.Values);
 
@@ -188,6 +191,28 @@ namespace Graphity
                 selectExpression);
 
             return Expression.Bind(mi, toListExpression);
+        }
+
+        private IEnumerable<QueryArgument> GetDefaultArguments(int defaultTake)
+        {
+            yield return new QueryArgument<ListGraphType<WhereExpressionType>>
+            {
+                Name = "where",
+                Description = "Filter to apply in format ```{path, comparison, value}```."
+            };
+
+            yield return new QueryArgument<IntGraphType>
+            {
+                Name = "skip",
+                Description = "The number of records to skip over"
+            };
+
+            yield return new QueryArgument<IntGraphType>
+            {
+                Name = "take",
+                Description = $"The number of records to return, if omitted the default is {defaultTake}",
+                DefaultValue = defaultTake
+            };
         }
     }
 }

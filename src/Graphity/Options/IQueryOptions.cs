@@ -9,9 +9,12 @@ namespace Graphity.Options
         where TContext : DbContext
     {
         string Name { get; }
+        int DefaultTake { get; }
+
         IReadOnlyCollection<IDbSetConfiguration> DbSetConfigurations { get; }
 
         IQueryOptions<TContext> QueryName(string name);
+        IQueryOptions<TContext> SetDefaultTake(int defaultTake);
 
         IDbSetConfigurationQueryOptions<TContext, TProperty> ConfigureSet<TProperty>(
             Expression<Func<TContext, DbSet<TProperty>>> dbSetExpression,

@@ -22,11 +22,18 @@ namespace Graphity.Options
         }
 
         public string Name => _options.Name;
+        public int DefaultTake => _options.DefaultTake;
+
         public IReadOnlyCollection<IDbSetConfiguration> DbSetConfigurations => _options.DbSetConfigurations;
 
         public IQueryOptions<TContext> QueryName(string name)
         {
             return _options.QueryName(name);
+        }
+
+        public IQueryOptions<TContext> SetDefaultTake(int defaultTake)
+        {
+            return _options.SetDefaultTake(defaultTake);
         }
 
         public IDbSetConfigurationQueryOptions<TContext, TProperty1> ConfigureSet<TProperty1>(

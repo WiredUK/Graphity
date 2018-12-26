@@ -10,16 +10,24 @@ namespace Graphity.Options
     {
         public IReadOnlyCollection<IDbSetConfiguration> DbSetConfigurations { get; }
         public string Name { get; private set; }
+        public int DefaultTake { get; private set; }
 
         internal QueryOptions()
         {
             Name = $"{typeof(TContext).Name}Query";
+            DefaultTake = 10;
             DbSetConfigurations = new List<IDbSetConfiguration>();
         }
 
         public IQueryOptions<TContext> QueryName(string name)
         {
             Name = name;
+            return this;
+        }
+
+        public IQueryOptions<TContext> SetDefaultTake(int defaultTake)
+        {
+            DefaultTake = defaultTake;
             return this;
         }
 
