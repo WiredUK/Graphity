@@ -150,5 +150,27 @@ namespace Graphity.Tests.Middleware
             Assert.Equal("Dog", item.Name);
             Assert.Null(item.LivesIn);
         }
+
+        [Fact]
+        public async Task Can_use_orderBy()
+        {
+            var client = _factory.CreateClient();
+
+            var query = new GraphQLQuery
+            {
+                Query = @"{animals(orderBy: {path: ""livesIn.name""}) {id name livesIn {name}}}"
+            };
+
+            var response = await client.PostAsJsonAsync("/api/graph", query);
+            response.EnsureSuccessStatusCode();
+            var result = await response.Content.ReadAsAsync<GraphExecutionResult<Animal>>();
+
+            Assert.Equal(4, result.Data["animals"].Count());
+
+            var item = result.Data["animals"].First();
+            Assert.Equal(4, item.Id);
+            Assert.Equal("Snake", item.Name);
+            Assert.Equal("Australia", item.LivesIn.Name);
+        }
     }
 }

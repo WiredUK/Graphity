@@ -24,10 +24,15 @@ namespace Graphity.Tests.Fixtures
 
             services.AddGraphity<TestContext>(options =>
             {
+                options
+                    .QueryName("RandomName")
+                    .SetDefaultTake(5);
+
                 options.ConfigureSet(ctx => ctx.Animals)
                     .TypeName("FaunaType")
                     .FieldName("filteredAnimals")
                     .Filter(a => a.Id > 1)
+                    .DefaultOrderBy(a => a.Name)
                     .ConfigureProperty(a => a.Id).Exclude()
                     .ConfigureProperty(a => a.LivesInId).Exclude();
 
