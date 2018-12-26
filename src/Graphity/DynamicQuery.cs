@@ -145,6 +145,7 @@ namespace Graphity
             IEnumerable<Field> fields)
         {
             return fields
+                .Where(subField => !subField.Name.StartsWith("__"))
                 .Select(subField => GetBinding(type, parameterExp, subField))
                 .ToList();
         }
