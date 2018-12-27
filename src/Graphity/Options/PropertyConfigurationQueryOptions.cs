@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Graphity.Ordering;
+using GraphQL.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Graphity.Options
@@ -24,6 +25,7 @@ namespace Graphity.Options
 
         public string Name => _options.Name;
         public int DefaultTake => _options.DefaultTake;
+        public string GlobalAuthorisationPolicy => _options.GlobalAuthorisationPolicy;
 
         public IReadOnlyCollection<IDbSetConfiguration> DbSetConfigurations => _options.DbSetConfigurations;
 
@@ -35,6 +37,19 @@ namespace Graphity.Options
         public IQueryOptions<TContext> SetDefaultTake(int defaultTake)
         {
             return _options.SetDefaultTake(defaultTake);
+        }
+
+        public IQueryOptions<TContext> SetGlobalAuthorisationPolicy(string authorisationPolicy)
+        {
+            _options.SetGlobalAuthorisationPolicy(authorisationPolicy);
+            return this;
+        }
+
+        public IQueryOptions<TContext> AddAuthorisationPolicy<TAuthorisationPolicy>(string name)
+            where TAuthorisationPolicy : IAuthorizationPolicy, new()
+        {
+            _options.AddAuthorisationPolicy<TAuthorisationPolicy>(name);
+            return this;
         }
 
         public IDbSetConfigurationQueryOptions<TContext, TProperty1> ConfigureSet<TProperty1>(
@@ -55,6 +70,12 @@ namespace Graphity.Options
         public IDbSetConfigurationQueryOptions<TContext, TEntity> TypeName(string name)
         {
             _dbSetConfiguration.TypeName = name;
+            return this;
+        }
+
+        public IDbSetConfigurationQueryOptions<TContext, TEntity> SetAuthorisationPolicy(string authorisationPolicy)
+        {
+            _dbSetConfiguration.AuthorisationPolicy = authorisationPolicy;
             return this;
         }
 

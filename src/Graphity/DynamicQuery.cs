@@ -9,6 +9,7 @@ using Graphity.Expressions;
 using Graphity.Options;
 using Graphity.Ordering;
 using Graphity.Where;
+using GraphQL.Authorization;
 using GraphQL.Language.AST;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +42,7 @@ namespace Graphity
 
                 var fieldMethod = genericFieldMethod.MakeGenericMethod(listGraphType);
 
-                fieldMethod.Invoke(this,
+                var field = (FieldType)fieldMethod.Invoke(this,
                     new object[]
                     {
                         dbSetProperty.FieldName,
@@ -51,6 +52,12 @@ namespace Graphity
                             GetDataFromContext(dbSetProperty.Type, resolveContext, dbSetProperty)),
                         null
                     });
+
+                if (!string.IsNullOrEmpty(QueryOptions.GlobalAuthorisationPolicy) ||
+                    !string.IsNullOrEmpty(dbSetProperty.AuthorisationPolicy))
+                {
+                    field.AuthorizeWith(dbSetProperty.AuthorisationPolicy ?? QueryOptions.GlobalAuthorisationPolicy);
+                }
             }
         }
 

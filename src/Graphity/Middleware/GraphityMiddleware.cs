@@ -1,10 +1,10 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
+using Graphity.Authorisation;
 using GraphQL;
 using GraphQL.Types;
+using GraphQL.Validation;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
@@ -13,21 +13,39 @@ namespace Graphity.Middleware
     // ReSharper disable once ClassNeverInstantiated.Global
     internal class GraphityMiddleware
     {
+        private readonly IDocumentExecuter _documentExecuter;
+        private readonly ISchema _schema;
+        private readonly GraphQLSettings _settings;
+        private readonly IEnumerable<IValidationRule> _validationRules;
+
         // ReSharper disable once UnusedParameter.Local
-        public GraphityMiddleware(RequestDelegate next)
+        public GraphityMiddleware(RequestDelegate next,
+            IDocumentExecuter documentExecuter,
+            ISchema schema,
+            GraphQLSettings settings,
+            IEnumerable<IValidationRule> validationRules)
         {
+            _documentExecuter = documentExecuter;
+            _schema = schema;
+            _settings = settings;
+
+            _validationRules = validationRules;
         }
 
         // ReSharper disable once UnusedMember.Global
-        public async Task InvokeAsync(HttpContext context,
-            IDocumentExecuter documentExecuter,
-            ISchema schema)
+        public async Task InvokeAsync(HttpContext context
+            )
         {
             var query = GetQuery(context);
-            var result = await documentExecuter.ExecuteAsync(options =>
+            var result = await _documentExecuter.ExecuteAsync(options =>
             {
+                options.SetFieldMiddleware = false;
+
+                options.UserContext = _settings.BuildUserContext(context);
+                options.ValidationRules = _validationRules;
+
                 options.OperationName = query.OperationName;
-                options.Schema = schema;
+                options.Schema = _schema;
                 options.Query = query.Query;
                 options.ExposeExceptions = true;
                 options.Inputs = query.Variables == null ? null : new Inputs(query.Variables);

@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Graphity.Tests.Fixtures;
 using Graphity.Where;

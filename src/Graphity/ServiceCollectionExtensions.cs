@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Graphity.Authorisation;
 using Graphity.Options;
 using Graphity.Ordering;
 using Graphity.Where;
 using GraphQL;
+using GraphQL.Authorization;
 using GraphQL.Types;
 using GraphQL.Utilities;
+using GraphQL.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,7 +37,9 @@ namespace Graphity
         /// <param name="services"></param>
         /// <param name="setupAction">Use this to configure the graph.</param>
         /// <returns></returns>
-        public static IServiceCollection AddGraphity<TContext>(this IServiceCollection services, Action<IQueryOptions<TContext>> setupAction)
+        public static IServiceCollection AddGraphity<TContext>(
+            this IServiceCollection services, 
+            Action<IQueryOptions<TContext>> setupAction)
             where TContext : DbContext
         {
             var contextService = services.SingleOrDefault(sd => sd.ImplementationType == typeof(TContext));
@@ -70,15 +76,47 @@ namespace Graphity
             {
                 var graphType = typeof(DynamicObjectGraphType<,>).MakeGenericType(typeof(TContext), field.Type);
 
-
                 services.AddSingleton(
                     graphType,
                     Activator.CreateInstance(graphType, field, (Action<Type>) TypeRegistrar));
             }
 
+            AddGraphQLAuth(services, queryOptions.AuthorisationPolicies);
+
             void TypeRegistrar(Type type) => services.AddSingleton(type);
 
             return services;
+        }
+
+        private static void AddGraphQLAuth(
+            IServiceCollection services,
+            IReadOnlyCollection<NamedAuthorisationPolicy> policies)
+        {
+            services.AddSingleton<IAuthorizationEvaluator, AuthorizationEvaluator>();
+            services.AddTransient<IValidationRule, AuthorizationValidationRule>();
+
+            services.AddSingleton(provider =>
+            {
+                var authSettings = new AuthorizationSettings();
+
+                if (policies != null && policies.Any())
+                {
+                    foreach (var policy in policies)
+                    {
+                        authSettings.AddPolicy(policy.Name, policy.AuthorizationPolicy);
+                    }
+                }
+
+                return authSettings;
+            });
+
+            services.AddSingleton(new GraphQLSettings
+            {
+                BuildUserContext = ctx => new GraphQLUserContext
+                {
+                    User = ctx.User
+                }
+            });
         }
     }
 }

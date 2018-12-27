@@ -30,6 +30,7 @@ namespace Graphity.Options
         }
 
         public SetOption SetOption { get; internal set; }
+        public string AuthorisationPolicy { get; internal set; }
 
         public LambdaExpression FilterExpression { get; internal set; }
         public LambdaExpression DefaultOrderByExpression { get; internal set; }

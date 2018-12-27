@@ -11,6 +11,8 @@ namespace Graphity.Options
         IDbSetConfigurationQueryOptions<TContext, TEntity> FieldName(string name);
         IDbSetConfigurationQueryOptions<TContext, TEntity> TypeName(string name);
 
+        IDbSetConfigurationQueryOptions<TContext, TEntity> SetAuthorisationPolicy(string authorisationPolicy);
+
         IDbSetConfigurationQueryOptions<TContext, TEntity> Filter(
             Expression<Func<TEntity, bool>> defaultFilter);
 

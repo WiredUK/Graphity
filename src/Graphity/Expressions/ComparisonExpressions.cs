@@ -91,7 +91,7 @@ namespace Graphity.Expressions
             if (propertyExp.Type == typeof(bool))
             {
                 throw new GraphityException(
-                    $"The 'GreaterThan' comparison cannot be made against a property of type bool");
+                    "The 'GreaterThan' comparison cannot be made against a property of type bool");
             }
 
             if (propertyExp.Type == typeof(string))
@@ -121,7 +121,7 @@ namespace Graphity.Expressions
             if (propertyExp.Type == typeof(bool))
             {
                 throw new GraphityException(
-                    $"The 'GreaterThanOrEqual' comparison cannot be made against a property of type bool");
+                    "The 'GreaterThanOrEqual' comparison cannot be made against a property of type bool");
             }
 
             if (propertyExp.Type == typeof(string))
@@ -152,7 +152,7 @@ namespace Graphity.Expressions
             if (propertyExp.Type == typeof(bool))
             {
                 throw new GraphityException(
-                    $"The 'LessThan' comparison cannot be made against a property of type bool");
+                    "The 'LessThan' comparison cannot be made against a property of type bool");
             }
 
             if (propertyExp.Type == typeof(string))
@@ -183,7 +183,7 @@ namespace Graphity.Expressions
             if (propertyExp.Type == typeof(bool))
             {
                 throw new GraphityException(
-                    $"The 'LessThanOrEqual' comparison cannot be made against a property of type bool");
+                    "The 'LessThanOrEqual' comparison cannot be made against a property of type bool");
             }
 
             if (propertyExp.Type == typeof(string))

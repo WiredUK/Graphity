@@ -1,8 +1,8 @@
-﻿using AspNetWebApi.Data;
+﻿using AspNetWebApi.AuthorisationPolicies;
+using AspNetWebApi.Data;
 using GraphiQl;
 using Graphity;
 using Graphity.Middleware;
-using Graphity.Ordering;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.Sqlite;
@@ -35,6 +35,10 @@ namespace AspNetWebApi
             {
                 options.QueryName("AnimalsQuery"); //Name the query
 
+                options.AddAuthorisationPolicy<HasAdminRoleAuthorisationPolicy>("admin-policy");
+
+                //options.SetGlobalAuthorisationPolicy("admin-policy");
+
                 //Configure the Animals DbSet
                 options.ConfigureSet(ctx => ctx.Animals)
                     .TypeName("FaunaType") //Name the type
@@ -45,8 +49,9 @@ namespace AspNetWebApi
                     .ConfigureProperty(a => a.LivesInId).Exclude(); //Remove LivesInId property from the graph
 
                 //Configure the Countries DbSet
-                options.ConfigureSet(ctx => ctx.Countries) 
-                    .ConfigureProperty(c => c.Id).Exclude(); //Remove Id property from the graph
+                options.ConfigureSet(ctx => ctx.Countries)
+                    .ConfigureProperty(c => c.Id).Exclude() //Remove Id property from the graph
+                    .SetAuthorisationPolicy("admin-policy"); //Restrict this field to admins only
 
                 //Configure the CountryProperties DbSet so it only shows as a child of a country
                 options.ConfigureSet(ctx => ctx.CountryProperties, null, SetOption.IncludeAsChildOnly)

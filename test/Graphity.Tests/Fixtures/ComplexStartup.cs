@@ -1,5 +1,4 @@
-﻿using System;
-using Graphity.Middleware;
+﻿using Graphity.Middleware;
 using Graphity.Tests.Fixtures.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

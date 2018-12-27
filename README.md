@@ -72,6 +72,52 @@ services.AddGraphity<AnimalContext>(options =>
 });
 ```
 
+## Authorisation
+
+Auth can be applied to the entire query or individual fields. First you need an authorization policy, for example to ensure a user is a member of a particular role:
+
+```c#
+public class HasAdminRoleAuthorisationPolicy : IAuthorizationPolicy
+{
+    public IEnumerable<IAuthorizationRequirement> Requirements => new[]
+    {
+        new ClaimAuthorizationRequirement(ClaimTypes.Role, new[] { "Admin" })
+    };
+}
+```
+
+And when you configure your query, first add the policy to the global cache and give it a name:
+
+```c#
+services.AddGraphity<AnimalContext>(options =>
+{
+    options.AddAuthorisationPolicy<HasAdminRoleAuthorisationPolicy>("admin-policy");
+}
+```
+
+If you want to assign this policy to the entire query, add it as a global policy:
+
+```c#
+services.AddGraphity<AnimalContext>(options =>
+{
+    options.AddAuthorisationPolicy<HasAdminRoleAuthorisationPolicy>("admin-policy");
+
+    options.SetGlobalAuthorisationPolicy("admin-policy");
+}
+```
+
+Or if you only want to protect a single field:
+
+```c#
+services.AddGraphity<AnimalContext>(options =>
+{
+    options.AddAuthorisationPolicy<HasAdminRoleAuthorisationPolicy>("admin-policy");
+
+    options.ConfigureSet(ctx => ctx.Countries)
+        .SetAuthorisationPolicy("admin-policy");
+}
+```
+
 ## Entity Framework Queries
 
 Another aim of this project is to construct the Entity Framework queries to be as efficient as possible. One of the way we do that is to `Include` the relevant child entities and only `Select` the properties we need.

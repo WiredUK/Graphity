@@ -11,6 +11,7 @@ namespace Graphity.Options
         string TypeName { get; }
         string FieldName { get; }
         SetOption SetOption { get; }
+        string AuthorisationPolicy { get; }
         LambdaExpression FilterExpression { get; }
         LambdaExpression DefaultOrderByExpression { get; }
         OrderByDirection OrderByDirection { get; }
