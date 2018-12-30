@@ -1,6 +1,12 @@
 language: csharp
 mono: none
-solution: Graphity.sln
-dotnet: 2.2.100
+sudo: required
+dist: xenial
+dotnet: 2.2
 script:
- - dotnet restore
+    - dotnet restore
+    - dotnet build
+    - dotnet test tests/Graphity.Tests/Graphity.Tests.csproj
+global:
+    - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
+    - DOTNET_CLI_TELEMETRY_OPTOUT=1
