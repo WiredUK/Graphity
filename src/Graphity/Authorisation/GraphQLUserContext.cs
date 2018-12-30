@@ -3,7 +3,7 @@ using GraphQL.Authorization;
 
 namespace Graphity.Authorisation
 {
-    public class GraphQLUserContext : IProvideClaimsPrincipal
+    internal class GraphQLUserContext : IProvideClaimsPrincipal
     {
         public ClaimsPrincipal User { get; set; }
     }

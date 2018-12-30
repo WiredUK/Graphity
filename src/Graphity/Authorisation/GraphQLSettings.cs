@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Http;
 
 namespace Graphity.Authorisation
 {
-    public class GraphQLSettings
+    internal class GraphQLSettings
     {
         public Func<HttpContext, GraphQLUserContext> BuildUserContext { get; set; }
     }
 
-    public class NamedAuthorisationPolicy
+    internal class NamedAuthorisationPolicy
     {
         public NamedAuthorisationPolicy(string name, IAuthorizationPolicy authorizationPolicy)
         {
