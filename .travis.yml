@@ -1,2 +1,5 @@
 language: csharp
 solution: Graphity.sln
+dotnet: 2.2.100
+script:
+ - dotnet restore
