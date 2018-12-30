@@ -1,5 +1,5 @@
 # Graphity 
-[![Nuget](https://img.shields.io/nuget/v/graphity.svg?style=for-the-badge)](https://www.nuget.org/packages/Graphity) [![Travis CI](https://img.shields.io/travis/WiredUK/Graphity.svg?style=for-the-badge)](https://travis-ci.org/WiredUK/Graphity)
+[![Nuget](https://img.shields.io/nuget/v/graphity.svg?style=for-the-badge)](https://www.nuget.org/packages/Graphity) [![AppVeyor](https://img.shields.io/appveyor/ci/WiredUK/graphity.svg?style=for-the-badge)](https://ci.appveyor.com/project/WiredUK/graphity) [![Unit Tests](https://img.shields.io/appveyor/tests/WiredUK/graphity.svg?style=for-the-badge)](https://ci.appveyor.com/project/WiredUK/graphity)
 
 A .NET Core library that integrates GraphQL and Entity Framework Core with minimal effort.
 
