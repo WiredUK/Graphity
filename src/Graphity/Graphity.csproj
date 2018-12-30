@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\Projects\Personal\Graphity\src\Graphity\Graphity.xml</DocumentationFile>
+    <DocumentationFile>Graphity.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
