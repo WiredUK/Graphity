@@ -1,2 +1,2 @@
 language: csharp
-project: /src/Graphity/Graphity.csproj
+solution: Graphity.sln
