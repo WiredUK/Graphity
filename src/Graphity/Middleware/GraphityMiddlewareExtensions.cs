@@ -2,6 +2,9 @@
 
 namespace Graphity.Middleware
 {
+    /// <summary>
+    /// Extension methods for configuring the Graphity middleware.
+    /// </summary>
     public static class GraphityMiddlewareExtensions
     {
         /// <summary>

@@ -1,7 +1,10 @@
-﻿using AspNetWebApi.AuthorisationPolicies;
+﻿using System;
+using System.Threading.Tasks;
+using AspNetWebApi.AuthorisationPolicies;
 using AspNetWebApi.Data;
 using GraphiQl;
 using Graphity;
+using Graphity.Authorisation;
 using Graphity.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,7 +38,8 @@ namespace AspNetWebApi
             {
                 options.QueryName("AnimalsQuery"); //Name the query
 
-                options.AddAuthorisationPolicy<HasAdminRoleAuthorisationPolicy>("admin-policy");
+                options.AddHasRolesAuthorisationPolicy("admin-policy", "admin");
+                options.AddFuncAuthorisationPolicy("weekendsOnly", WeekendOnlyPolicy);
 
                 //options.SetGlobalAuthorisationPolicy("admin-policy");
 
@@ -54,9 +58,28 @@ namespace AspNetWebApi
                     .SetAuthorisationPolicy("admin-policy"); //Restrict this field to admins only
 
                 //Configure the CountryProperties DbSet so it only shows as a child of a country
-                options.ConfigureSet(ctx => ctx.CountryProperties, null, SetOption.IncludeAsChildOnly)
+                options.ConfigureSet(ctx => ctx.CountryProperties)
+                    .SetAuthorisationPolicy("weekendsOnly") //We can only call this field on a weekend
                     .ConfigureProperty(cp => cp.CountryId).Exclude(); //Remove CountryId property from the graph
+                    
             });
+        }
+
+        /// <summary>
+        /// A contrived authorisation policy function
+        /// </summary>
+        /// <returns></returns>
+        private static async Task<AuthorisationResult> WeekendOnlyPolicy()
+        {
+            var isWeekend = DateTime.Today.DayOfWeek == DayOfWeek.Saturday ||
+                            DateTime.Today.DayOfWeek == DayOfWeek.Sunday;
+
+            //This isn't really an async method
+            await Task.CompletedTask;
+
+            return isWeekend 
+                ? AuthorisationResult.Success() 
+                : AuthorisationResult.Fail("This query can only be used on a Saturday or Sunday");
         }
 
         private void ConfigureContext(IServiceCollection services)

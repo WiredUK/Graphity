@@ -76,28 +76,62 @@ services.AddGraphity<AnimalContext>(options =>
 
 ## Authorisation
 
-Auth can be applied to the entire query or individual fields. First you need an authorization policy, for example to ensure a user is a member of a particular role:
+Authorisation comes in two parts. First the policies need to be defined, and secondly those policies need to be assigned to the query or individual fields.
 
-```c#
-public class HasAdminRoleAuthorisationPolicy : IAuthorizationPolicy
-{
-    public IEnumerable<IAuthorizationRequirement> Requirements => new[]
-    {
-        new ClaimAuthorizationRequirement(ClaimTypes.Role, new[] { "Admin" })
-    };
-}
-```
-
-And when you configure your query, first add the policy to the global cache and give it a name:
+Graphity comes with some default policies that you can use, or you can add your own custom policies. If you want to ensure a user has a particular role, use the `AddHasRolesAuthorisationPolicy` method:
 
 ```c#
 services.AddGraphity<AnimalContext>(options =>
 {
-    options.AddAuthorisationPolicy<HasAdminRoleAuthorisationPolicy>("admin-policy");
+    options.AddHasRolesAuthorisationPolicy("admin-policy", "admin");
+};
+```
+
+If you want to ensure a user has a particular scope, use the `AddHasScopeAuthorisationPolicy` method:
+
+```c#
+services.AddGraphity<AnimalContext>(options =>
+{
+    options.AddHasScopeAuthorisationPolicy("scope-policy", "scope1");
+};
+```
+
+For a more complex requirement you have two options. You can implement your own `IAuthorizationPolicy` and add it to the store:
+
+```c#
+services.AddGraphity<AnimalContext>(options =>
+{
+    options.options.AddAuthorisationPolicy<MyCustomAuthPolicy>("custom-policy");
+};
+```
+
+Or you can use the `Func` policy that lets you use a simple method. For example, you could have a method as simple as this:
+
+```c#
+private static async Task<AuthorisationResult> WeekendOnlyPolicy()
+{
+    var isWeekend = DateTime.Today.DayOfWeek == DayOfWeek.Saturday ||
+                    DateTime.Today.DayOfWeek == DayOfWeek.Sunday;
+
+    //This isn't really an async method
+    await Task.CompletedTask;
+
+    return isWeekend 
+        ? AuthorisationResult.Success() 
+        : AuthorisationResult.Fail("This query can only be used on a Saturday or Sunday");
 }
 ```
 
-If you want to assign this policy to the entire query, add it as a global policy:
+And add it to the store like this, note how it take a delegate to the `WeekendOnlyPolicy` method:
+
+```c#
+services.AddGraphity<AnimalContext>(options =>
+{
+    options.AddFuncAuthorisationPolicy("weekendsOnly", WeekendOnlyPolicy);
+};
+```
+
+Now you've defined your policies, you need to assign them. If you want to assign this policy to the entire query, add it as a global policy:
 
 ```c#
 services.AddGraphity<AnimalContext>(options =>

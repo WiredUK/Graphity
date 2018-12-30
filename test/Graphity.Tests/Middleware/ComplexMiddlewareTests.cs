@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -58,6 +59,47 @@ namespace Graphity.Tests.Middleware
             var item = result.Data["filteredAnimals"].First();
             Assert.Equal("Cat", item.Name);
             Assert.Equal("France", item.LivesIn.Name);
+        }
+
+        [Fact]
+        public async Task Calling_field_without_auth_will_return_bad_request()
+        {
+            var client = _factory.CreateClient();
+
+            var query = new GraphQLQuery
+            {
+                Query = @"{countryProperties { population }}"
+            };
+
+            var response = await client.PostAsJsonAsync("/api/graph", query);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var result = await response.Content.ReadAsAsync<GraphExecutionResult<CountryProperties>>();
+
+            Assert.Null(result.Data);
+            Assert.NotEmpty(result.Errors);
+        }
+
+        [Fact]
+        public async Task Calling_field_with_func_policy_will_fail_first_time()
+        {
+            var client = _factory.CreateClient();
+
+            var query = new GraphQLQuery
+            {
+                Query = @"{country { name }}"
+            };
+
+            var response = await client.PostAsJsonAsync("/api/graph", query);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            //Call it again...
+            response = await client.PostAsJsonAsync("/api/graph", query);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var result = await response.Content.ReadAsAsync<GraphExecutionResult<Country>>();
+
+            Assert.NotEmpty(result.Data["country"]);
+            Assert.Null(result.Errors);
         }
     }
 }

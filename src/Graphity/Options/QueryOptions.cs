@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Graphity.Authorisation;
 using GraphQL.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -45,22 +47,47 @@ namespace Graphity.Options
         public IQueryOptions<TContext> AddAuthorisationPolicy<TAuthorisationPolicy>(string name)
             where TAuthorisationPolicy : IAuthorizationPolicy, new()
         {
-            ((List<NamedAuthorisationPolicy>)AuthorisationPolicies).Add(new NamedAuthorisationPolicy(
+            var newPolicy = new NamedAuthorisationPolicy(
                 name,
-                new TAuthorisationPolicy()));
+                new TAuthorisationPolicy());
+
+            ((List<NamedAuthorisationPolicy>)AuthorisationPolicies).Add(newPolicy);
+
             return this;
         }
 
-        /// <summary>
-        /// Configure an individual DbSet for inclusion or exclusion. By default all DbSets are included. Manually including
-        /// a single DbSet will then only include that item. 
-        /// </summary>
-        /// <typeparam name="TProperty"></typeparam>
-        /// <param name="dbSetExpression"></param>
-        /// <param name="setOption"></param>
-        /// <param name="fieldName"></param>
-        /// <param name="defaultFilter"></param>
-        /// <returns></returns>
+        public IQueryOptions<TContext> AddHasClaimAuthorisationPolicy(string policyName, string claimType, params string[] values)
+        {
+            var newPolicy = new NamedAuthorisationPolicy(
+                policyName,
+                new HasClaimAuthorisationPolicy(claimType, values));
+
+            ((List<NamedAuthorisationPolicy>)AuthorisationPolicies).Add(newPolicy);
+
+            return this;
+        }
+
+        public IQueryOptions<TContext> AddHasRolesAuthorisationPolicy(string policyName, params string[] roles)
+        {
+            return AddHasClaimAuthorisationPolicy(policyName, ClaimTypes.Role, roles);
+        }
+
+        public IQueryOptions<TContext> AddHasScopeAuthorisationPolicy(string policyName, params string[] scopes)
+        {
+            return AddHasClaimAuthorisationPolicy(policyName, "Scope", scopes);
+        }
+
+        public IQueryOptions<TContext> AddFuncAuthorisationPolicy(string policyName, Func<Task<AuthorisationResult>> authoriseFunc)
+        {
+            var newPolicy = new NamedAuthorisationPolicy(
+                policyName,
+                new FuncAuthorisationPolicy(authoriseFunc));
+
+            ((List<NamedAuthorisationPolicy>)AuthorisationPolicies).Add(newPolicy);
+
+            return this;
+        }
+
         public IDbSetConfigurationQueryOptions<TContext, TProperty> ConfigureSet<TProperty>(
             Expression<Func<TContext, DbSet<TProperty>>> dbSetExpression,
             string fieldName = null,

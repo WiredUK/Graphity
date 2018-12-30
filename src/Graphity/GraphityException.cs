@@ -2,7 +2,7 @@
 
 namespace Graphity
 {
-    public class GraphityException : Exception
+    internal class GraphityException : Exception
     {
         public GraphityException(string message) : base(message)
         {

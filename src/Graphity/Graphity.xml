@@ -1,0 +1,335 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Graphity</name>
+    </assembly>
+    <members>
+        <member name="T:Graphity.Authorisation.AuthorisationResult">
+            <summary>
+            The result of a custom authorisation requirement.
+            </summary>
+        </member>
+        <member name="M:Graphity.Authorisation.AuthorisationResult.Success">
+            <summary>
+            Gets a successful authorisation result.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.Authorisation.AuthorisationResult.Fail(System.String)">
+            <summary>
+            Gets a failed authorisation result.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Graphity.Authorisation.AuthorisationResult.Successful">
+            <summary>
+            Was authorisation successful
+            </summary>
+        </member>
+        <member name="P:Graphity.Authorisation.AuthorisationResult.ErrorMessage">
+            <summary>
+            If authorisation was not successful, this is the error message.
+            </summary>
+        </member>
+        <member name="T:Graphity.Middleware.GraphityMiddlewareExtensions">
+            <summary>
+            Extension methods for configuring the Graphity middleware.
+            </summary>
+        </member>
+        <member name="M:Graphity.Middleware.GraphityMiddlewareExtensions.UseGraphity(Microsoft.AspNetCore.Builder.IApplicationBuilder,System.String)">
+            <summary>
+            Add the Graphity middleware to the ASP pipeline
+            </summary>
+            <param name="builder"></param>
+            <param name="path">Optional parameter to specify the URL that is used for the graph endpoint</param>
+            <returns></returns>
+        </member>
+        <member name="T:Graphity.Options.IDbSetConfiguration">
+            <summary>
+            The interface for configuring an individual DbSet field.
+            </summary>
+        </member>
+        <member name="P:Graphity.Options.IDbSetConfiguration.Type">
+            <summary>
+            The type of the DbSet.
+            </summary>
+        </member>
+        <member name="P:Graphity.Options.IDbSetConfiguration.TypeName">
+            <summary>
+            The name of the type.
+            </summary>
+        </member>
+        <member name="P:Graphity.Options.IDbSetConfiguration.FieldName">
+            <summary>
+            The name of the field.
+            </summary>
+        </member>
+        <member name="P:Graphity.Options.IDbSetConfiguration.SetOption">
+            <summary>
+            The visibility option of the set.
+            </summary>
+        </member>
+        <member name="P:Graphity.Options.IDbSetConfiguration.AuthorisationPolicy">
+            <summary>
+            Configure an authorisation policy to apply to this field.
+            </summary>
+        </member>
+        <member name="P:Graphity.Options.IDbSetConfiguration.FilterExpression">
+            <summary>
+            The expression used to filter the data.
+            </summary>
+        </member>
+        <member name="P:Graphity.Options.IDbSetConfiguration.DefaultOrderByExpression">
+            <summary>
+            The expression used to order the set.
+            </summary>
+        </member>
+        <member name="P:Graphity.Options.IDbSetConfiguration.OrderByDirection">
+            <summary>
+            The default ordering direction used by <see cref="P:Graphity.Options.IDbSetConfiguration.DefaultOrderByExpression"/>.
+            </summary>
+        </member>
+        <member name="P:Graphity.Options.IDbSetConfiguration.PropertyConfigurations">
+            <summary>
+            The configurations applied to individual properties.
+            </summary>
+        </member>
+        <member name="T:Graphity.Options.IDbSetConfigurationQueryOptions`2">
+            <summary>
+            
+            </summary>
+            <typeparam name="TContext"></typeparam>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="M:Graphity.Options.IDbSetConfigurationQueryOptions`2.FieldName(System.String)">
+            <summary>
+            Set the field name.
+            </summary>
+            <param name="name">The name to use.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.Options.IDbSetConfigurationQueryOptions`2.TypeName(System.String)">
+            <summary>
+            Set the name for the type.
+            </summary>
+            <param name="name">The name to use.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.Options.IDbSetConfigurationQueryOptions`2.SetAuthorisationPolicy(System.String)">
+            <summary>
+            Assign an authorisation policy to this field.
+            </summary>
+            <param name="authorisationPolicy">The name of the authorisation policy.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.Options.IDbSetConfigurationQueryOptions`2.Filter(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}})">
+            <summary>
+            Apply a default filter to the field.
+            </summary>
+            <param name="defaultFilter">The expression to use.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.Options.IDbSetConfigurationQueryOptions`2.DefaultOrderBy(System.Linq.Expressions.Expression{System.Func{`1,System.Object}},Graphity.Ordering.OrderByDirection)">
+            <summary>
+            Apply a default ordering to the field.
+            </summary>
+            <param name="defaultOrderBy">The expression to use.</param>
+            <param name="orderByDirection">The order direction to use.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.Options.IDbSetConfigurationQueryOptions`2.ConfigureProperty``1(System.Linq.Expressions.Expression{System.Func{`1,``0}})">
+            <summary>
+            Configure an individual property of the field.
+            </summary>
+            <typeparam name="TProperty"></typeparam>
+            <param name="propertyExpression">The property to configure.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Graphity.Options.IPropertyConfiguration">
+            <summary>
+            The configuration of an individual field property.
+            </summary>
+        </member>
+        <member name="P:Graphity.Options.IPropertyConfiguration.Exclude">
+            <summary>
+            Exclude the property from the graph.
+            </summary>
+        </member>
+        <member name="P:Graphity.Options.IPropertyConfiguration.PropertyName">
+            <summary>
+            The name of the property.
+            </summary>
+        </member>
+        <member name="T:Graphity.Options.IPropertyConfigurationQueryOptions`3">
+            <summary>
+            The interface for configuring an individual property.
+            </summary>
+            <typeparam name="TContext"></typeparam>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TProperty"></typeparam>
+        </member>
+        <member name="M:Graphity.Options.IPropertyConfigurationQueryOptions`3.Exclude">
+            <summary>
+            Configure an individual property to be excluded from the graph.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Graphity.Options.IQueryOptions`1">
+            <summary>
+            The interface for configuring Graphity
+            </summary>
+            <typeparam name="TContext"></typeparam>
+        </member>
+        <member name="P:Graphity.Options.IQueryOptions`1.Name">
+            <summary>
+            The name of the query.
+            </summary>
+        </member>
+        <member name="P:Graphity.Options.IQueryOptions`1.DefaultTake">
+            <summary>
+            The default number to be used as the 'take' value.
+            </summary>
+        </member>
+        <member name="P:Graphity.Options.IQueryOptions`1.GlobalAuthorisationPolicy">
+            <summary>
+            The default authorisation policy to use for the entire query.
+            </summary>
+        </member>
+        <member name="P:Graphity.Options.IQueryOptions`1.DbSetConfigurations">
+            <summary>
+            The assigned configurations for individual DbSets.
+            </summary>
+        </member>
+        <member name="M:Graphity.Options.IQueryOptions`1.QueryName(System.String)">
+            <summary>
+            Sets the query name.
+            </summary>
+            <param name="name">The new query name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.Options.IQueryOptions`1.SetDefaultTake(System.Int32)">
+            <summary>
+            Sets the default number to be used as the 'take' value.
+            </summary>
+            <param name="defaultTake">The value to be used as the default 'take' value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.Options.IQueryOptions`1.SetGlobalAuthorisationPolicy(System.String)">
+            <summary>
+            Sets the global authorisation policy to apply to all queries.
+            </summary>
+            <param name="authorisationPolicy"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.Options.IQueryOptions`1.AddAuthorisationPolicy``1(System.String)">
+            <summary>
+            Add a custom authorisation policy to the store.
+            </summary>
+            <typeparam name="TAuthorisationPolicy">The type to be used</typeparam>
+            <param name="name">The name of the policy used when assigning it to fields.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.Options.IQueryOptions`1.AddHasRolesAuthorisationPolicy(System.String,System.String[])">
+            <summary>
+            Add a role requirement policy to the store.
+            </summary>
+            <param name="policyName">The name of the policy used when assigning it to fields.</param>
+            <param name="roles">The roles used to authorise with.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.Options.IQueryOptions`1.AddHasScopeAuthorisationPolicy(System.String,System.String[])">
+            <summary>
+            Add a scope requirement policy to the store. This is commonly used with Identity Server.
+            </summary>
+            <param name="policyName">The name of the policy used when assigning it to fields.</param>
+            <param name="scopes">The scopes used to authorise with.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.Options.IQueryOptions`1.AddFuncAuthorisationPolicy(System.String,System.Func{System.Threading.Tasks.Task{Graphity.Authorisation.AuthorisationResult}})">
+            <summary>
+            Add an authorisation policy to the store that uses a custom function.
+            </summary>
+            <param name="policyName">The name of the policy used when assigning it to fields.</param>
+            <param name="authoriseFunc">The asynchronous function to call to authorise the request.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.Options.IQueryOptions`1.AddHasClaimAuthorisationPolicy(System.String,System.String,System.String[])">
+            <summary>
+            Add a generic claim check to the available authorisation policies.
+            </summary>
+            <param name="policyName">The name of the policy to be used when assigning it to fields.</param>
+            <param name="claimType">The type of the claim (e.g. <see cref="T:System.Security.Claims.ClaimTypes"/> for examples.</param>
+            <param name="values">The claim values</param>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.Options.IQueryOptions`1.ConfigureSet``1(System.Linq.Expressions.Expression{System.Func{`0,Microsoft.EntityFrameworkCore.DbSet{``0}}},System.String,Graphity.SetOption,System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            Configure an individual DbSet for inclusion or exclusion. By default all DbSets are included. Manually including
+            a single DbSet will then only include that item. 
+            </summary>
+            <typeparam name="TProperty"></typeparam>
+            <param name="dbSetExpression"></param>
+            <param name="setOption"></param>
+            <param name="fieldName"></param>
+            <param name="defaultFilter"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Graphity.Ordering.OrderByDirection">
+            <summary>
+            The direction used when ordering.
+            </summary>
+        </member>
+        <member name="F:Graphity.Ordering.OrderByDirection.Ascending">
+            <summary>
+            Order ascending.
+            </summary>
+        </member>
+        <member name="F:Graphity.Ordering.OrderByDirection.Descending">
+            <summary>
+            Order descending.
+            </summary>
+        </member>
+        <member name="T:Graphity.ServiceCollectionExtensions">
+            <summary>
+            The methods used to configure Graphity and add it to the DI container.
+            </summary>
+        </member>
+        <member name="M:Graphity.ServiceCollectionExtensions.AddGraphity``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Add Graphity with all context properties enabled
+            </summary>
+            <typeparam name="TContext"></typeparam>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Graphity.ServiceCollectionExtensions.AddGraphity``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Graphity.Options.IQueryOptions{``0}})">
+            <summary>
+            Add Graphity with a user defined configuration
+            </summary>
+            <typeparam name="TContext"></typeparam>
+            <param name="services"></param>
+            <param name="setupAction">Use this to configure the graph.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Graphity.SetOption">
+            <summary>
+            The visibility of a DbSet.
+            </summary>
+        </member>
+        <member name="F:Graphity.SetOption.IncludeAsFieldOnly">
+            <summary>
+            The DbSet will only present as a root level field.
+            </summary>
+        </member>
+        <member name="F:Graphity.SetOption.IncludeAsChildOnly">
+            <summary>
+            The DbSet will only present as a child af another DbSet and not a field.
+            </summary>
+        </member>
+        <member name="F:Graphity.SetOption.IncludeAsFieldAndChild">
+            <summary>
+            The DbSet will present as both a field an as children of other DbSets.
+            </summary>
+        </member>
+    </members>
+</doc>

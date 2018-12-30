@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Graphity.Authorisation;
 using Graphity.Ordering;
 using GraphQL.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +52,26 @@ namespace Graphity.Options
         {
             _options.AddAuthorisationPolicy<TAuthorisationPolicy>(name);
             return this;
+        }
+
+        public IQueryOptions<TContext> AddHasRolesAuthorisationPolicy(string policyName, params string[] roles)
+        {
+            return _options.AddHasRolesAuthorisationPolicy(policyName, roles);
+        }
+
+        public IQueryOptions<TContext> AddHasScopeAuthorisationPolicy(string policyName, params string[] scopes)
+        {
+            return _options.AddHasScopeAuthorisationPolicy(policyName, scopes);
+        }
+
+        public IQueryOptions<TContext> AddHasClaimAuthorisationPolicy(string policyName, string claimType, params string[] values)
+        {
+            return _options.AddHasClaimAuthorisationPolicy(policyName, claimType, values);
+        }
+
+        public IQueryOptions<TContext> AddFuncAuthorisationPolicy(string policyName, Func<Task<AuthorisationResult>> authoriseFunc)
+        {
+            return _options.AddFuncAuthorisationPolicy(policyName, authoriseFunc);
         }
 
         public IDbSetConfigurationQueryOptions<TContext, TProperty1> ConfigureSet<TProperty1>(

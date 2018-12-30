@@ -1,4 +1,7 @@
-﻿using Graphity.Middleware;
+﻿using System;
+using System.Threading.Tasks;
+using Graphity.Authorisation;
+using Graphity.Middleware;
 using Graphity.Tests.Fixtures.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,7 +28,9 @@ namespace Graphity.Tests.Fixtures
             {
                 options
                     .QueryName("RandomName")
-                    .SetDefaultTake(5);
+                    .SetDefaultTake(5)
+                    .AddHasScopeAuthorisationPolicy("scopeCheck", "scope1")
+                    .AddFuncAuthorisationPolicy("fail-on-first-call", FailOnFirstCall);
 
                 options.ConfigureSet(ctx => ctx.Animals)
                     .TypeName("FaunaType")
@@ -35,7 +40,11 @@ namespace Graphity.Tests.Fixtures
                     .ConfigureProperty(a => a.Id).Exclude()
                     .ConfigureProperty(a => a.LivesInId).Exclude();
 
-                options.ConfigureSet(ctx => ctx.Countries, setOption: SetOption.IncludeAsChildOnly);
+                options.ConfigureSet(ctx => ctx.Countries)
+                    .SetAuthorisationPolicy("fail-on-first-call");
+
+                options.ConfigureSet(ctx => ctx.CountryProperties)
+                    .SetAuthorisationPolicy("scopeCheck");
             });
 
             var sp = services.BuildServiceProvider();
@@ -51,6 +60,20 @@ namespace Graphity.Tests.Fixtures
                 // Seed the database with test data.
                 ContextFixture.SeedTestData(db);
             }
+        }
+
+        private static bool _hasBeenCalled;
+        private static async Task<AuthorisationResult> FailOnFirstCall()
+        {
+            await Task.CompletedTask;
+
+            var result = _hasBeenCalled
+                ? AuthorisationResult.Success()
+                : AuthorisationResult.Fail("This query can only be used on a Saturday or Sunday");
+
+            _hasBeenCalled = true;
+
+            return result;
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

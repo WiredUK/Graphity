@@ -15,6 +15,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Graphity
 {
+    /// <summary>
+    /// The methods used to configure Graphity and add it to the DI container.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
         /// <summary>
