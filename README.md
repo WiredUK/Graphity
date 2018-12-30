@@ -137,7 +137,7 @@ Starting off with a basic query, get all animals and the country where they live
 }
 ```
 
-How about we only want animals that start with the letter 'S':
+How about we only want animals that start with the letter 'S'. For that we could use the `where` parameter. That allows us to pass a list of clauses that will get "and"ed together:
 
 ```graphql
 {
@@ -161,6 +161,45 @@ We also support some basic dotted dereferencing of non-enumerable child properti
     }
   }
 }
+```
+
+Or multiple clauses:
+
+```graphql
+{
+  filteredAnimals(where: [{path: "name", comparison: startsWith, value: "C"},
+                          {path: "numberOfLegs", comparison: greaterThan, value: "2"}]) {
+    name
+    livesIn {
+      country: name
+    }
+  }
+}
+```
+
+We can also write more complex filters in the query with the `filter` parameter. For example:
+
+```graphql
+{
+  filteredAnimals(filter: "name = `Cat` or numberOfLegs < 4") {
+    name
+    livesIn {
+      country: name
+    }
+  }
+}
+```
+
+For a more comprehensive list of what is possible with the `filter` parameter, see the [wiki docs for `System.Linq.Dynamic.Core`](https://github.com/StefH/System.Linq.Dynamic.Core/wiki/Dynamic-Expressions). The only difference Graphity has is that you can specify strings using backticks as well as double quotes. This is because the filter values are already wrapped in quotes and are very awkward to write. So instead of having to escape the inner quotes like this:
+
+```graphql
+filter: "name = \"Cat\""
+```
+
+You can write
+
+```graphql
+filter: "name = `Cat`"
 ```
 
 Perhaps we only want the first 3 animals:

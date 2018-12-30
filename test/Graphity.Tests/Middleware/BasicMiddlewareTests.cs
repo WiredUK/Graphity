@@ -86,6 +86,72 @@ namespace Graphity.Tests.Middleware
         }
 
         [Fact]
+        public async Task Can_use_basic_filter()
+        {
+            var client = _factory.CreateClient();
+
+            var query = new GraphQLQuery
+            {
+                Query = @"{animals(filter: ""name = `Snake`"") {id name}}"
+            };
+
+            var response = await client.PostAsJsonAsync("/api/graph", query);
+            response.EnsureSuccessStatusCode();
+            var result = await response.Content.ReadAsAsync<GraphExecutionResult<Animal>>();
+
+            Assert.Single(result.Data["animals"]);
+
+            var item = result.Data["animals"].First();
+            Assert.Equal(4, item.Id);
+            Assert.Equal("Snake", item.Name);
+            Assert.Null(item.LivesIn);
+        }
+
+        [Fact]
+        public async Task Can_use_complex_filter()
+        {
+            var client = _factory.CreateClient();
+
+            var query = new GraphQLQuery
+            {
+                Query = @"{animals(filter: ""name = `Cat` or numberOfLegs = 2"") {id name}}"
+            };
+
+            var response = await client.PostAsJsonAsync("/api/graph", query);
+            response.EnsureSuccessStatusCode();
+            var result = await response.Content.ReadAsAsync<GraphExecutionResult<Animal>>();
+
+            Assert.Equal(2, result.Data["animals"].Count());
+
+            var first = result.Data["animals"].First();
+            Assert.Equal(2, first.Id);
+            Assert.Equal("Cat", first.Name);
+            Assert.Null(first.LivesIn);
+
+            var last = result.Data["animals"].Last();
+            Assert.Equal(3, last.Id);
+            Assert.Equal("Sloth", last.Name);
+            Assert.Null(last.LivesIn);
+        }
+
+        [Fact]
+        public async Task Passing_an_invalid_filter_will_throw()
+        {
+            var client = _factory.CreateClient();
+
+            var query = new GraphQLQuery
+            {
+                Query = @"{animals(filter: ""turnip = `Tuesday`"") {id name}}"
+            };
+
+            var response = await client.PostAsJsonAsync("/api/graph", query);
+            var result = await response.Content.ReadAsAsync<GraphExecutionResult<Animal>>();
+
+            Assert.Null(result.Data["animals"]);
+            Assert.Single(result.Errors);
+        }
+
+        [Fact]
         public async Task Can_use_multiple_where_expressions()
         {
             var client = _factory.CreateClient();

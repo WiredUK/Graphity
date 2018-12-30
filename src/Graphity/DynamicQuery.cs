@@ -3,12 +3,14 @@ using System.Collections;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Reflection;
 using Graphity.Expressions;
 using Graphity.Options;
 using Graphity.Ordering;
 using Graphity.Where;
+using GraphQL;
 using GraphQL.Authorization;
 using GraphQL.Language.AST;
 using GraphQL.Types;
@@ -49,7 +51,17 @@ namespace Graphity
                         $"{dbSetProperty.FieldName} of type {dbSetProperty.TypeName}",
                         new QueryArguments(GetDefaultArguments(QueryOptions.DefaultTake)),
                         (Func<ResolveFieldContext<object>, object>) (resolveContext =>
-                            GetDataFromContext(dbSetProperty.Type, resolveContext, dbSetProperty)),
+                        {
+                            try
+                            {
+                                return GetDataFromContext(dbSetProperty.Type, resolveContext, dbSetProperty);
+                            }
+                            catch (GraphityException ex)
+                            {
+                                resolveContext.Errors.Add(new ExecutionError(ex.Message));
+                                return null;
+                            }
+                        }),
                         null
                     });
 
@@ -73,7 +85,20 @@ namespace Graphity
             using (var scope = _resolver.CreateScope())
             {
                 var context = scope.ServiceProvider.GetService<TContext>();
-                return getDataMethod.Invoke(this, new object[] {context, resolveContext, dbSetConfiguration});
+
+                try
+                {
+                    return getDataMethod.Invoke(this, new object[] { context, resolveContext, dbSetConfiguration });
+                }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException == null)
+                    {
+                        throw new GraphityException(ex.Message);
+                    }
+
+                    throw new GraphityException(ex.InnerException.Message);
+                }
             }
         }
 
@@ -106,6 +131,14 @@ namespace Graphity
                 }
             }
 
+            if (resolveContext.Arguments.ContainsKey("filter"))
+            {
+                var filterExpression = resolveContext.GetArgument<string>("filter");
+
+                var expression = GetFilterExpression<TEntity>(filterExpression);
+                query = query.Where(expression);
+            }
+
             if (resolveContext.Arguments.ContainsKey("orderBy"))
             {
                 var orderByExpression = resolveContext.GetArgument<OrderByExpression>("orderBy");
@@ -132,6 +165,16 @@ namespace Graphity
             return query
                 .Select(projectionExpression)
                 .ToList();
+        }
+
+        private static Expression<Func<TEntity, bool>> GetFilterExpression<TEntity>(string filterExpression)
+        {
+            var updatedExpression = filterExpression.Replace('`', '"');
+
+            var expression = DynamicExpressionParser.ParseLambda(ParsingConfig.DefaultEFCore21,
+                typeof(TEntity), typeof(bool), updatedExpression);
+
+            return (Expression<Func<TEntity, bool>>)expression;
         }
 
         private int _entityCounter;
@@ -221,6 +264,12 @@ namespace Graphity
             {
                 Name = "where",
                 Description = "Filter to apply in format ```{path, comparison, value}```."
+            };
+
+            yield return new QueryArgument<StringGraphType>
+            {
+                Name = "filter",
+                Description = "Filter to apply to the data, for example `Name == \"Bob\" and Age = 25`. *Note that string values can surrounded with back ticks as well as double quotes.*"
             };
 
             yield return new QueryArgument<IntGraphType>
