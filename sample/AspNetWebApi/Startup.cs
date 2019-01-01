@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AspNetWebApi.AuthorisationPolicies;
 using AspNetWebApi.Data;
 using GraphiQl;
 using Graphity;

@@ -2,16 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.9.8</Version>
+    <Version>1.0.0</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>A .NET Core library that integrates GraphQL and Entity Framework Core with minimal effort</Description>
     <PackageProjectUrl>https://github.com/WiredUK/Graphity</PackageProjectUrl>
     <PackageIconUrl>http://david.glass/w-logo.png</PackageIconUrl>
-    <PackageTags>GraphQL Entity Framework Core</PackageTags>
-    <PackageReleaseNotes>Improved 'where' expression generation, skip/take and orderBy support</PackageReleaseNotes>
+    <PackageTags>GraphQL Entity Framework Core json api dynamic</PackageTags>
+    <PackageReleaseNotes>* Improved advanced 'filter' expression.
+* Add authorisation
+* Add CI complete with test runner and code coverage checks
+* Updated to version 1.0</PackageReleaseNotes>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <AssemblyVersion>0.9.8.0</AssemblyVersion>
-    <FileVersion>0.9.8.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
