@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>A .NET Core library that integrates GraphQL and Entity Framework Core with minimal effort</Description>
     <PackageProjectUrl>https://github.com/WiredUK/Graphity</PackageProjectUrl>
@@ -10,8 +10,8 @@
     <PackageTags>GraphQL Entity Framework Core json api dynamic</PackageTags>
     <PackageReleaseNotes>Added support for Guid and nullable enum properties</PackageReleaseNotes>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <AssemblyVersion>1.0.2.0</AssemblyVersion>
-    <FileVersion>1.0.2.0</FileVersion>
+    <AssemblyVersion>1.0.3.0</AssemblyVersion>
+    <FileVersion>1.0.3.0</FileVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
