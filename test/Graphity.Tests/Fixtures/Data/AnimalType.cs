@@ -1,6 +1,6 @@
 ﻿namespace Graphity.Tests.Fixtures.Data
 {
-    public enum AnimalTypeEnum
+    public enum AnimalType
     {
         Mammal,
         Reptile

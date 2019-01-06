@@ -104,7 +104,7 @@ namespace Graphity
                     var enumGraphType = typeof(EnumerationGraphType<>).MakeGenericType(property.PropertyType);
                     var graphType = typeof(NonNullGraphType<>).MakeGenericType(enumGraphType);
                     Field(graphType, property.Name);
-                    typeRegistrar(graphType);
+                    typeRegistrar(enumGraphType);
                 }
                 else if (property.PropertyType.IsGenericType &&
                          property.PropertyType.GetGenericArguments().First().IsEnum)

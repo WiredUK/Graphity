@@ -106,7 +106,7 @@ namespace Graphity.Tests.Middleware
             var item = result.Data["animals"].Last();
             Assert.Equal(4, item.Id);
             Assert.Equal("Snake", item.Name);
-            Assert.Equal(AnimalTypeEnum.Reptile, item.AnimalType);
+            Assert.Equal(AnimalType.Reptile, item.AnimalType);
             Assert.Null(item.LivesIn);
         }
 
