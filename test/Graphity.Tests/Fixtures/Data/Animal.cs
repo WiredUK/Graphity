@@ -1,4 +1,6 @@
-﻿namespace Graphity.Tests.Fixtures.Data
+﻿using System;
+
+namespace Graphity.Tests.Fixtures.Data
 {
     public class Animal
     {
@@ -6,6 +8,8 @@
         public string Name { get; set; }
         public short NumberOfLegs { get; set; }
         public AnimalTypeEnum AnimalType { get; set; }
+
+        public Guid HandlerId { get; set; }
 
         public int LivesInId { get; set; }
         public Country LivesIn { get; set; }

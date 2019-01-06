@@ -29,6 +29,14 @@ namespace Graphity
                 {
                     Field<StringGraphType>(property.Name);
                 }
+                else if (property.PropertyType == typeof(Guid))
+                {
+                    Field<NonNullGraphType<GuidGraphType>>(property.Name);
+                }
+                else if (property.PropertyType == typeof(Guid?))
+                {
+                    Field<GuidGraphType>(property.Name);
+                }
                 else if (property.PropertyType == typeof(short) ||
                          property.PropertyType == typeof(int) ||
                          property.PropertyType == typeof(long))

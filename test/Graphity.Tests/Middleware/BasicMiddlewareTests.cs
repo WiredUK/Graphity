@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -61,6 +62,29 @@ namespace Graphity.Tests.Middleware
             Assert.Equal(1, item.Id);
             Assert.Equal("Dog", item.Name);
             Assert.Equal("England", item.LivesIn.Name);
+        }
+
+        [Fact]
+        public async Task Can_retrieve_guid_entity_property()
+        {
+            var client = _factory.CreateClient();
+
+            var query = new GraphQLQuery
+            {
+                Query = @"{animals {id name, handlerId}}"
+            };
+
+            var response = await client.PostAsJsonAsync("/api/graph", query);
+            response.EnsureSuccessStatusCode();
+            var result = await response.Content.ReadAsAsync<GraphExecutionResult<Animal>>();
+
+            Assert.Equal(4, result.Data["animals"].Count());
+
+            var item = result.Data["animals"].First();
+            Assert.Equal(1, item.Id);
+            Assert.Equal("Dog", item.Name);
+            Assert.NotEqual(Guid.Empty, item.HandlerId);
+            Assert.Null(item.LivesIn);
         }
 
         [Fact]

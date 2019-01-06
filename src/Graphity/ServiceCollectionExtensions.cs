@@ -62,6 +62,7 @@ namespace Graphity
             services.AddSingleton<ISchema, DynamicSchema<TContext>>();
             services.AddSingleton<DynamicQuery<TContext>>();
             services.AddSingleton<ObjectGraphType>();
+            services.AddSingleton<GuidGraphType>();
 
             //Where
             services.AddSingleton<WhereExpressionType>();

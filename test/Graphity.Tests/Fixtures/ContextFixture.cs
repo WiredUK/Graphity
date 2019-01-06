@@ -28,10 +28,10 @@ namespace Graphity.Tests.Fixtures
         private static void SeedAnimals(TestContext context)
         {
             context.Animals.AddRange(
-                new Animal {Id = 1, Name = "Dog", NumberOfLegs = 4, AnimalType = AnimalTypeEnum.Mammal, LivesInId = 1},
-                new Animal {Id = 2, Name = "Cat", NumberOfLegs = 4, AnimalType = AnimalTypeEnum.Mammal, LivesInId = 2},
-                new Animal {Id = 3, Name = "Sloth", NumberOfLegs = 2, AnimalType = AnimalTypeEnum.Mammal, LivesInId = 3},
-                new Animal {Id = 4, Name = "Snake", NumberOfLegs = 0, AnimalType = AnimalTypeEnum.Reptile, LivesInId = 4}
+                new Animal {Id = 1, Name = "Dog", NumberOfLegs = 4, AnimalType = AnimalTypeEnum.Mammal, LivesInId = 1, HandlerId = Guid.NewGuid() },
+                new Animal {Id = 2, Name = "Cat", NumberOfLegs = 4, AnimalType = AnimalTypeEnum.Mammal, LivesInId = 2, HandlerId = Guid.NewGuid() },
+                new Animal {Id = 3, Name = "Sloth", NumberOfLegs = 2, AnimalType = AnimalTypeEnum.Mammal, LivesInId = 3, HandlerId = Guid.NewGuid() },
+                new Animal {Id = 4, Name = "Snake", NumberOfLegs = 0, AnimalType = AnimalTypeEnum.Reptile, LivesInId = 4, HandlerId = Guid.NewGuid() }
             );
         }
 
