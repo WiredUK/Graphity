@@ -277,6 +277,14 @@ But a `skip`/`take` is rarely a good idea without specifying an order, and we ca
 }
 ```
 
+## Samples
+
+There are a few [sample projects in the repository](https://github.com/WiredUK/Graphity/tree/master/sample) if you would like to see Graphity in action.
+
+1. **[ZeroConfiguration](https://github.com/WiredUK/Graphity/tree/master/sample/ZeroConfiguration)** - This project shows the bare minimum code you need to implement Graphity.
+2. **[FullConfiguration](https://github.com/WiredUK/Graphity/tree/master/sample/FullConfiguration)** - This is a more complex configuration showing off a much more complete set of configuration options.
+3. **[MvcWithAuthorisation](https://github.com/WiredUK/Graphity/tree/master/sample/MvcWithAuthorisation)** - A project with MVC that also demonstrates the authorisation aspect of Graphity.
+
 ## TODO
 
 Here are some things I'd like to get working:
