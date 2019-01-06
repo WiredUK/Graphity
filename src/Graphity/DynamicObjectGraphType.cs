@@ -102,11 +102,16 @@ namespace Graphity
                 else if (property.PropertyType.IsEnum)
                 {
                     var enumGraphType = typeof(EnumerationGraphType<>).MakeGenericType(property.PropertyType);
-                    var graphType = property.PropertyType.IsNullable()
-                        ? enumGraphType
-                        : typeof(NonNullGraphType<>).MakeGenericType(enumGraphType);
-
+                    var graphType = typeof(NonNullGraphType<>).MakeGenericType(enumGraphType);
                     Field(graphType, property.Name);
+                    typeRegistrar(graphType);
+                }
+                else if (property.PropertyType.IsGenericType &&
+                         property.PropertyType.GetGenericArguments().First().IsEnum)
+                {
+                    var enumType = property.PropertyType.GetGenericArguments().First();
+                    var enumGraphType = typeof(EnumerationGraphType<>).MakeGenericType(enumType);
+                    Field(enumGraphType, property.Name);
                     typeRegistrar(enumGraphType);
                 }
                 else if (property.PropertyType == typeof(byte[]))

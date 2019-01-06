@@ -88,6 +88,29 @@ namespace Graphity.Tests.Middleware
         }
 
         [Fact]
+        public async Task Can_retrieve_nullable_enum_property()
+        {
+            var client = _factory.CreateClient();
+
+            var query = new GraphQLQuery
+            {
+                Query = @"{animals {id name, nullableAnimalType}}"
+            };
+
+            var response = await client.PostAsJsonAsync("/api/graph", query);
+            response.EnsureSuccessStatusCode();
+            var result = await response.Content.ReadAsAsync<GraphExecutionResult<Animal>>();
+
+            Assert.Equal(4, result.Data["animals"].Count());
+
+            var item = result.Data["animals"].First();
+            Assert.Equal(1, item.Id);
+            Assert.Equal("Dog", item.Name);
+            Assert.Null(item.NullableAnimalType);
+            Assert.Null(item.LivesIn);
+        }
+
+        [Fact]
         public async Task Can_use_where_expression()
         {
             var client = _factory.CreateClient();
