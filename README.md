@@ -277,6 +277,13 @@ But a `skip`/`take` is rarely a good idea without specifying an order, and we ca
 }
 ```
 
+## I get an error saying "No service for type..."
+
+This is almost certainly because you have an entity that doesn't have a corresponding `DbSet`. It's a current limitation of Graphity that means you need to have this in place or you will get errors such as this. You have two options:
+
+1. Add a `DbSet` for the missing entity.
+2. Configure your graph to exclude any properties that relate to this entity. See above for an explanation on how to do that.
+
 ## Samples
 
 There are a few [sample projects in the repository](https://github.com/WiredUK/Graphity/tree/master/sample) if you would like to see Graphity in action.
