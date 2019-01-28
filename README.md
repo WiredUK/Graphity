@@ -1,5 +1,6 @@
 # Graphity 
 [![Nuget](https://img.shields.io/nuget/v/graphity.svg?style=for-the-badge)](https://www.nuget.org/packages/Graphity) [![AppVeyor](https://img.shields.io/appveyor/ci/WiredUK/graphity.svg?style=for-the-badge)](https://ci.appveyor.com/project/WiredUK/graphity) [![Unit Tests](https://img.shields.io/appveyor/tests/WiredUK/graphity.svg?style=for-the-badge)](https://ci.appveyor.com/project/WiredUK/graphity) [![Code Coverage](https://img.shields.io/codecov/c/github/wireduk/graphity.svg?style=for-the-badge)](https://codecov.io/gh/WiredUK/Graphity)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FWiredUK%2FGraphity.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FWiredUK%2FGraphity?ref=badge_shield)
 
 A .NET Core library that integrates GraphQL and Entity Framework Core with minimal effort.
 
@@ -315,3 +316,6 @@ I am open to contributions but please open an issue and discuss it with me befor
 ## Get in Contact
 
 I love hearing from people who have tried out my projects, really makes it feel like a worthwhile endeavour. If you want to get in touch to say hi or comment about this (or any other projects) or even have any suggestions, please use the details in [my profile](https://github.com/WiredUK). 
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FWiredUK%2FGraphity.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FWiredUK%2FGraphity?ref=badge_large)
