@@ -1,9 +1,9 @@
 # Graphity 
 [![Nuget](https://img.shields.io/nuget/v/graphity.svg?style=for-the-badge)](https://www.nuget.org/packages/Graphity) [![AppVeyor](https://img.shields.io/appveyor/ci/WiredUK/graphity.svg?style=for-the-badge)](https://ci.appveyor.com/project/WiredUK/graphity) [![Unit Tests](https://img.shields.io/appveyor/tests/WiredUK/graphity.svg?style=for-the-badge)](https://ci.appveyor.com/project/WiredUK/graphity) [![Code Coverage](https://img.shields.io/codecov/c/github/wireduk/graphity.svg?style=for-the-badge)](https://codecov.io/gh/WiredUK/Graphity)
 
-A .NET Core library that integrates GraphQL and Entity Framework Core with minimal effort.
+A .NET Core library that exposes a DbContext as a GraphQL endpoint with zero configuration.
 
-The aim of this project is to provide a GraphQL endpoint by providing only the DbContext. Further configuration of the schema and queries will be available but not required to get up and running fast.
+The aim of this project is to provide a GraphQL endpoint by providing only the DbContext. Further configuration of the schema and queries is available but not required to get up and running fast.
 
 ## How to use Graphity
 
@@ -11,7 +11,7 @@ The aim of this project is to provide a GraphQL endpoint by providing only the D
 2. Add the [Graphity Nuget package](https://www.nuget.org/packages/Graphity) to your project using the Visual Studio Nuget Package manager or from the command line:
 
     ```
-    dotnet add package graphiql
+    dotnet add package graphity
     ```
 
 3. In your `ConfigureServices` method in `Startup`, add Graphity to your container:
