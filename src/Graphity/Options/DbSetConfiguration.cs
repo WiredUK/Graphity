@@ -37,6 +37,6 @@ namespace Graphity.Options
         public OrderByDirection OrderByDirection { get; internal set; }
 
         public IReadOnlyCollection<IPropertyConfiguration> PropertyConfigurations { get; }
-
+        public bool IsQuery { get; internal set; }
     }
 }

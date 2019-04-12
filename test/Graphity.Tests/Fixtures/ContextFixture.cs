@@ -28,10 +28,10 @@ namespace Graphity.Tests.Fixtures
         private static void SeedAnimals(TestContext context)
         {
             context.Animals.AddRange(
-                new Animal {Id = 1, Name = "Dog", NumberOfLegs = 4, AnimalType = AnimalType.Mammal, LivesInId = 1, HandlerId = Guid.NewGuid() },
-                new Animal {Id = 2, Name = "Cat", NumberOfLegs = 4, AnimalType = AnimalType.Mammal, LivesInId = 2, HandlerId = Guid.NewGuid() },
-                new Animal {Id = 3, Name = "Sloth", NumberOfLegs = 2, AnimalType = AnimalType.Mammal, LivesInId = 3, HandlerId = Guid.NewGuid() },
-                new Animal {Id = 4, Name = "Snake", NumberOfLegs = 0, AnimalType = AnimalType.Reptile, LivesInId = 4, HandlerId = Guid.NewGuid() }
+                new Animal { Id = 1, Name = "Dog", NumberOfLegs = 4, AnimalType = AnimalType.Mammal, LivesInId = 1, HandlerId = Guid.NewGuid() },
+                new Animal { Id = 2, Name = "Cat", NumberOfLegs = 4, AnimalType = AnimalType.Mammal, LivesInId = 2, HandlerId = Guid.NewGuid() },
+                new Animal { Id = 3, Name = "Sloth", NumberOfLegs = 2, AnimalType = AnimalType.Mammal, LivesInId = 3, HandlerId = Guid.NewGuid() },
+                new Animal { Id = 4, Name = "Snake", NumberOfLegs = 0, AnimalType = AnimalType.Reptile, LivesInId = 4, HandlerId = Guid.NewGuid() }
             );
         }
 
@@ -64,10 +64,10 @@ namespace Graphity.Tests.Fixtures
         private static void SeedCountries(TestContext context)
         {
             context.Countries.AddRange(
-                new Country {Id = 1, Name = "England"},
-                new Country {Id = 2, Name = "France"},
-                new Country {Id = 3, Name = "Germany"},
-                new Country {Id = 4, Name = "Australia"}
+                new Country { Id = 1, Name = "England" },
+                new Country { Id = 2, Name = "France" },
+                new Country { Id = 3, Name = "Germany" },
+                new Country { Id = 4, Name = "Australia" }
             );
         }
     }

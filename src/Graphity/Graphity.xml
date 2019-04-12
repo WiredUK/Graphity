@@ -94,6 +94,11 @@
             The configurations applied to individual properties.
             </summary>
         </member>
+        <member name="P:Graphity.Options.IDbSetConfiguration.IsQuery">
+            <summary>
+            Indicates that the item is a DbQuery rather than a DbSet
+            </summary>
+        </member>
         <member name="T:Graphity.Options.IDbSetConfigurationQueryOptions`2">
             <summary>
             

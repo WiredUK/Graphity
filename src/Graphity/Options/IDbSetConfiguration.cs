@@ -54,5 +54,10 @@ namespace Graphity.Options
         /// The configurations applied to individual properties.
         /// </summary>
         IReadOnlyCollection<IPropertyConfiguration> PropertyConfigurations { get; }
+
+        /// <summary>
+        /// Indicates that the item is a DbQuery rather than a DbSet
+        /// </summary>
+        bool IsQuery { get; }
     }
 }

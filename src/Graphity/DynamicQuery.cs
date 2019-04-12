@@ -109,7 +109,9 @@ namespace Graphity
             IDbSetConfiguration dbSetConfiguration)
             where TEntity : class
         {
-            IQueryable<TEntity> query = context.Set<TEntity>();
+            IQueryable<TEntity> query = dbSetConfiguration.IsQuery
+                ? (IQueryable<TEntity>)context.Query<TEntity>()
+                : context.Set<TEntity>();
 
             if (dbSetConfiguration.FilterExpression != null)
             {

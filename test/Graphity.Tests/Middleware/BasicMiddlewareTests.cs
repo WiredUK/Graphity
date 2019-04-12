@@ -308,5 +308,22 @@ namespace Graphity.Tests.Middleware
             Assert.Equal("Snake", item.Name);
             Assert.Equal("Australia", item.LivesIn.Name);
         }
+
+        [Fact]
+        public async Task Can_query_DbQuery_field()
+        {
+            var client = _factory.CreateClient();
+
+            var query = new GraphQLQuery
+            {
+                Query = @"{animalsByCountry { countryId count}}"
+            };
+
+            var response = await client.PostAsJsonAsync("/api/graph", query);
+            response.EnsureSuccessStatusCode();
+            var result = await response.Content.ReadAsAsync<GraphExecutionResult<Animal>>();
+
+            Assert.Equal(4, result.Data["animalsByCountry"].Count());
+        }
     }
 }

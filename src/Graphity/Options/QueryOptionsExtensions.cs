@@ -7,13 +7,16 @@ namespace Graphity.Options
 {
     internal static class QueryOptionsExtensions
     {
+        private static readonly Type[] DbTypes = { typeof(DbSet<>), typeof(DbQuery<>) };
+
         internal static IEnumerable<IDbSetConfiguration> GetFields<TContext>(this IQueryOptions<TContext> options)
             where TContext : DbContext
         {
+
             var dbSetProperties = typeof(TContext)
                 .GetProperties()
                 .Where(pi => pi.PropertyType.IsGenericType &&
-                             typeof(DbSet<>).IsAssignableFrom(pi.PropertyType.GetGenericTypeDefinition()));
+                             DbTypes.Any(dbt => dbt.IsAssignableFrom(pi.PropertyType.GetGenericTypeDefinition())));
 
             if (!options.DbSetConfigurations.Any())
             {
@@ -22,7 +25,8 @@ namespace Graphity.Options
                     SetOption = SetOption.IncludeAsFieldAndChild,
                     Type = pi.PropertyType.GetGenericArguments()[0],
                     TypeName = pi.Name,
-                    FieldName = pi.Name
+                    FieldName = pi.Name,
+                    IsQuery = typeof(DbQuery<>).IsAssignableFrom(pi.PropertyType.GetGenericTypeDefinition())
                 });
             }
 
@@ -37,7 +41,7 @@ namespace Graphity.Options
             var dbSetProperties = typeof(TContext)
                 .GetProperties()
                 .Where(pi => pi.PropertyType.IsGenericType &&
-                             typeof(DbSet<>).IsAssignableFrom(pi.PropertyType.GetGenericTypeDefinition()));
+                             DbTypes.Any(dbt => dbt.IsAssignableFrom(pi.PropertyType.GetGenericTypeDefinition())));
 
             if (!options.DbSetConfigurations.Any())
             {

@@ -69,7 +69,7 @@ namespace Graphity.Tests.Fixtures
 
             var result = _hasBeenCalled
                 ? AuthorisationResult.Success()
-                : AuthorisationResult.Fail("This query can only be used on a Saturday or Sunday");
+                : AuthorisationResult.Fail("This query will fail the first time you call it, try again.");
 
             _hasBeenCalled = true;
 
