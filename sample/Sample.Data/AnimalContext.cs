@@ -26,7 +26,7 @@ namespace Sample.Data
 
                 builder.HasData(new List<Country>
                 {
-                    new Country {Id = 1, Name = "England"},
+                    new Country {Id = 1, Name = "England", SomeByteValue = 5},
                     new Country {Id = 2, Name = "France"},
                     new Country {Id = 3, Name = "Germany"},
                     new Country {Id = 4, Name = "Australia"}

@@ -279,6 +279,11 @@ namespace Graphity.Expressions
             }
 
             //Integer types
+            if (type == typeof(byte))
+            {
+                return byte.Parse(input);
+            }
+            
             if (type == typeof(short))
             {
                 return short.Parse(input);
@@ -316,7 +321,7 @@ namespace Graphity.Expressions
                 return bool.Parse(input);
             }
 
-            throw new ArgumentException("Valid types are string, short, int, long, decimal, float, double and bool",
+            throw new ArgumentException("Valid types are string, byte, short, int, long, decimal, float, double and bool",
                 nameof(type));
         }
 
@@ -331,6 +336,11 @@ namespace Graphity.Expressions
             }
 
             //Integer types
+            if (type == typeof(byte))
+            {
+                return parts.Select(byte.Parse);
+            }
+            
             if (type == typeof(short))
             {
                 return parts.Select(short.Parse);
@@ -368,7 +378,7 @@ namespace Graphity.Expressions
                 return parts.Select(bool.Parse);
             }
 
-            throw new ArgumentException("Valid types are string, short, int, long, decimal, float, double and bool",
+            throw new ArgumentException("Valid types are string, byte, short, int, long, decimal, float, double and bool",
                 nameof(type));
         }
 

@@ -5,7 +5,6 @@ using Graphity;
 using Graphity.Authorisation;
 using Graphity.Middleware;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sample.Data;
@@ -53,6 +52,11 @@ namespace FullConfiguration
                     .SetAuthorisationPolicy("weekendsOnly") //We can only call this field on a weekend
                     .ConfigureProperty(cp => cp.CountryId).Exclude(); //Remove CountryId property from the graph
             });
+
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
         }
 
         /// <summary>
@@ -73,7 +77,7 @@ namespace FullConfiguration
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseGraphity();
 

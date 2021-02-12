@@ -37,13 +37,15 @@ namespace Graphity
                 {
                     Field<GuidGraphType>(property.Name);
                 }
-                else if (property.PropertyType == typeof(short) ||
+                else if (property.PropertyType == typeof(byte) ||
+                         property.PropertyType == typeof(short) ||
                          property.PropertyType == typeof(int) ||
                          property.PropertyType == typeof(long))
                 {
                     Field<NonNullGraphType<IntGraphType>>(property.Name);
                 }
-                else if (property.PropertyType == typeof(short?) ||
+                else if (property.PropertyType == typeof(byte?) ||
+                         property.PropertyType == typeof(short?) ||
                          property.PropertyType == typeof(int?) ||
                          property.PropertyType == typeof(long?))
                 {

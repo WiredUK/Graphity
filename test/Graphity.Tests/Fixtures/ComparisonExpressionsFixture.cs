@@ -13,6 +13,7 @@ namespace Graphity.Tests.Fixtures
                 new Parent
                 {
                     StringProperty = "string1",
+                    ByteProperty = 1,
                     ShortProperty = 1,
                     IntProperty = 1,
                     LongProperty = 1,
@@ -25,6 +26,7 @@ namespace Graphity.Tests.Fixtures
                 new Parent
                 {
                     StringProperty = "string2",
+                    ByteProperty = 2,
                     ShortProperty = 2,
                     IntProperty = 2,
                     LongProperty = 2,
@@ -36,6 +38,7 @@ namespace Graphity.Tests.Fixtures
                 new Parent
                 {
                     StringProperty = "string3",
+                    ByteProperty = 3,
                     ShortProperty = 3,
                     IntProperty = 3,
                     LongProperty = 3,
@@ -47,6 +50,7 @@ namespace Graphity.Tests.Fixtures
                 new Parent
                 {
                     StringProperty = "string4",
+                    ByteProperty = 4,
                     ShortProperty = 4,
                     IntProperty = 4,
                     LongProperty = 4,
@@ -58,6 +62,7 @@ namespace Graphity.Tests.Fixtures
                 new Parent
                 {
                     StringProperty = "string5",
+                    ByteProperty = 5,
                     ShortProperty = 5,
                     IntProperty = 5,
                     LongProperty = 5,
@@ -72,6 +77,7 @@ namespace Graphity.Tests.Fixtures
         public class Parent
         {
             public string StringProperty { get; set; }
+            public byte ByteProperty { get; set; }
             public short ShortProperty { get; set; }
             public int IntProperty { get; set; }
             public long LongProperty { get; set; }
