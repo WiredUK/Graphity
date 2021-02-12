@@ -76,7 +76,7 @@ namespace Graphity.Tests.Fixtures
             return result;
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseGraphity();
         }

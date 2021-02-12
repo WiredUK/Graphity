@@ -1,7 +1,6 @@
 ﻿using Graphity.Middleware;
 using Graphity.Tests.Fixtures.Data;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,20 +24,18 @@ namespace Graphity.Tests.Fixtures
 
             var sp = services.BuildServiceProvider();
 
-            using (var scope = sp.CreateScope())
-            {
-                var scopedServices = scope.ServiceProvider;
-                var db = scopedServices.GetRequiredService<TestContext>();
+            using var scope = sp.CreateScope();
+            var scopedServices = scope.ServiceProvider;
+            var db = scopedServices.GetRequiredService<TestContext>();
 
-                // Ensure the database is created.
-                db.Database.EnsureCreated();
+            // Ensure the database is created.
+            db.Database.EnsureCreated();
 
-                // Seed the database with test data.
-                ContextFixture.SeedTestData(db);
-            }
+            // Seed the database with test data.
+            ContextFixture.SeedTestData(db);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseGraphity();
         }
